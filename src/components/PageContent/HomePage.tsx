@@ -1,27 +1,11 @@
 "use client";
-import { Container } from "@chakra-ui/react";
-import {
-  Auth,
-  AuthForm,
-  MagicLinkForm,
-  PasswordForm,
-  OtpForm,
-  Providers,
-  AutoForm,
-  Fields,
-  Card,
-  CardBody,
-} from "@saas-ui/react";
-import React from "react";
+
+import { Center, Stack } from "@chakra-ui/react";
 
 export default function HomePage() {
   return (
-    <Container mt="5rem">
-      <Card title="Welcome!">
-        <CardBody>
-          <AuthForm  />
-        </CardBody>
-      </Card>
-    </Container>
+    <Center height="100vh">
+      <Stack spacing="8"></Stack>
+    </Center>
   );
 }
