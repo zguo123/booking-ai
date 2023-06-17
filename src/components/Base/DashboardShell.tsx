@@ -30,7 +30,6 @@ export default function DashboardShell({
 }) {
   return (
     <AppShell
-      h="100vh"
       sidebar={
         <Sidebar width="30%">
           <SidebarSection direction="row">
