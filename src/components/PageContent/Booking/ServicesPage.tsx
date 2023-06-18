@@ -16,7 +16,7 @@ export default function ServicesPage() {
         isDisabled: value.length === 0,
       }}
     >
-      <Stack pb={4}>
+      <Stack pb={4} w="full">
         <Stack spacing={3} pt={10}>
           <Heading size="2xl" textAlign="center">
             Services

@@ -20,6 +20,7 @@ import {
   SubmitButton,
   registerFieldType,
 } from "@saas-ui/react";
+import { useRouter } from "next/navigation";
 import ReactInputMask from "react-input-mask";
 
 registerFieldType(
@@ -55,16 +56,18 @@ registerFieldType(
 );
 
 export default function EnterInfoPage() {
+  const router = useRouter();
+
   const onSubmit = (params: any) => {
-    console.log(params);
     return new Promise((resolve) => {
       setTimeout(resolve, 1000);
+      router.push("/book/details");
     });
   };
 
   return (
     <BookingLayoutBase>
-      <Stack pb={4}>
+      <Stack w="full" pb={4}>
         <Stack spacing={3} pt={10}>
           <Heading size="2xl" textAlign="center">
             Enter your information

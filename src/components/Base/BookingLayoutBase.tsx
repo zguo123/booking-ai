@@ -7,6 +7,7 @@ import {
   ButtonGroup,
   ButtonProps,
   Container,
+  Flex,
   Heading,
 } from "@chakra-ui/react";
 import { PageBody, PageContainer } from "@saas-ui/pro";
@@ -16,6 +17,14 @@ import {
   PersonaDetails,
   PersonaLabel,
 } from "@saas-ui/react";
+import {
+  Sidebar,
+  SidebarSection,
+  SidebarToggleButton,
+  SidebarOverlay,
+  NavGroup,
+  NavItem,
+} from "@saas-ui/sidebar";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
@@ -55,48 +64,12 @@ export default function BookingLayoutBase({
     <AppShell
       variant="fullscreen"
       px={0}
-      footer={
-        <Box as="footer" borderTopWidth={1}>
-          <Container maxW="full">
-            <ButtonGroup
-              py={3}
-              size="lg"
-              w="full"
-              display="flex"
-              justifyContent="space-between"
-            >
-              {pathname !== "/book" && (
-                <Button
-                  w={{
-                    base: "full",
-                    lg: "auto",
-                  }}
-                  variant="secondary"
-                  onClick={back}
-                  {...backBtnProps}
-                >
-                  Back
-                </Button>
-              )}
-              {pathname !== "/book/select-date" &&
-                pathname !== "/book/contact" && (
-                  <Button
-                    w={{
-                      base: "full",
-                      lg: "auto",
-                    }}
-                    variant="solid"
-                    colorScheme="blue"
-                    ml="auto"
-                    onClick={next}
-                    {...nextBtnProps}
-                  >
-                    {pathname === "/book/contact" ? "Confirm & Finish" : "Next"}
-                  </Button>
-                )}
-            </ButtonGroup>
-          </Container>
-        </Box>
+      sidebar={
+        pathname === "/book/details" ? null : (
+          <Sidebar display={pathname === "/book/details" ? "none" : "block"}>
+            <SidebarSection></SidebarSection>
+          </Sidebar>
+        )
       }
       navbar={
         <Box py={4} as="header" borderBottomWidth={1}>
@@ -114,9 +87,57 @@ export default function BookingLayoutBase({
       }
     >
       <PageContainer>
-        <PageBody>
-          <Container maxW="full">{children}</Container>
-        </PageBody>
+        <PageBody flex={1}>
+          <Container maxW="full" display="flex" minH="full">
+            <Flex flex={1}>{children}</Flex>
+          </Container>
+        </PageBody>{" "}
+        <Box
+          as="footer"
+          display={pathname === "/book/details" ? "none" : "block"}
+          borderTopWidth={1}
+        >
+          <Container maxW="full">
+            <ButtonGroup
+              py={3}
+              size="lg"
+              w="full"
+              display="flex"
+              justifyContent="space-between"
+            >
+              {pathname !== "/book" && pathname !== "/book/details" && (
+                <Button
+                  w={{
+                    base: "full",
+                    lg: "auto",
+                  }}
+                  variant="secondary"
+                  onClick={back}
+                  {...backBtnProps}
+                >
+                  Back
+                </Button>
+              )}
+              {pathname !== "/book/select-date" &&
+                pathname !== "/book/contact" &&
+                pathname !== "/book/details" && (
+                  <Button
+                    w={{
+                      base: "full",
+                      lg: "auto",
+                    }}
+                    variant="solid"
+                    colorScheme="blue"
+                    ml="auto"
+                    onClick={next}
+                    {...nextBtnProps}
+                  >
+                    Next
+                  </Button>
+                )}
+            </ButtonGroup>
+          </Container>
+        </Box>
       </PageContainer>
     </AppShell>
   );

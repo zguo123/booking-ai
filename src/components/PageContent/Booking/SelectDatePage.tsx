@@ -70,7 +70,7 @@ export default function SelectDatePage() {
 
   return (
     <BookingLayoutBase>
-      <Stack pb={4}>
+      <Stack w="full" pb={4}>
         <Stack spacing={3} pt={10}>
           <Heading size="2xl" textAlign="center">
             Choose Date & Time
