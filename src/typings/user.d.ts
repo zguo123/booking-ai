@@ -18,6 +18,7 @@ export interface IUserItems {
   lastName: string;
   lastLogin?: Date;
   email: string;
+  username: string;
 }
 
 export type UserItemsWithoutId = Omit<IUserItems, "_id">;

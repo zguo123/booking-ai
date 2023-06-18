@@ -36,6 +36,7 @@ const userSchema = new Schema<IUserItems>({
       message: `Email is not valid`,
     },
   },
+  
   lastLogin: {
     type: Date,
     default: new Date(),

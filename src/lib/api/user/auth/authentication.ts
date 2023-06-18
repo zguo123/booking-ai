@@ -14,7 +14,7 @@ import {
   removeTokenCookie,
   setTokenCookie,
 } from "@/lib/cookies";
-import UserModel from "@/models/UserModal";
+import UserModel from "@/models/UserModel";
 import {
   AuthenticateUser,
   CheckIsAuthenticated,

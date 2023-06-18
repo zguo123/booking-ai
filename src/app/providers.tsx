@@ -23,8 +23,8 @@ const BaseTheme = extendTheme(
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <CacheProvider speedy>
-        <SaasProvider resetCSS theme={BaseTheme}>
+      <CacheProvider>
+        <SaasProvider theme={BaseTheme}>
           <ColorModeScript
             initialColorMode={BaseTheme.config.initialColorMode}
           />
