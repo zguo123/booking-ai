@@ -74,7 +74,7 @@ export default function BookingLayoutBase({
       navbar={
         <Box py={4} as="header" borderBottomWidth={1}>
           <Container maxW="full">
-            <PersonaContainer size="md">
+            <PersonaContainer size="lg">
               <Avatar bg="blue.500" name={"yan Hu"} />
               <PersonaDetails>
                 <PersonaLabel as={Heading} size="lg">
