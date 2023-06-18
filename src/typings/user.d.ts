@@ -6,7 +6,7 @@
  * @author Zhaoyu Guo
  */
 import { JWTPayload } from "jose";
-import { MagicUserMetadata } from "magic-sdk";
+import { MagicUserMetadata } from "magic";
 import mongoose, { Document, ObjectId, Types } from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import { APIRet, Override } from "./global";

@@ -45,7 +45,7 @@ export const isAuthenticated: CheckIsAuthenticated = (token) => {
  * @returns The user metadata
  */
 export const retrieveUserData: RetrieveUserMetadata = async (authToken) => {
-  magic.token.validate(authToken as string);
+  await magic.token.validate(authToken as string);
 
   return await magic.users.getMetadataByToken(authToken);
 };
