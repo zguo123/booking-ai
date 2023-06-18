@@ -6,10 +6,10 @@
  * @author Zhaoyu Guo
  */
 
-import { errorHandler } from "@/lib/api/user/errorHandler";
 import UserModel from "@/models/UserModel";
 import { CreateUser } from "@/typings/user";
 import { StatusCodes } from "http-status-codes";
+import { errorHandler } from "../errorHandler";
 
 const createUser: CreateUser = async (user) => {
   try {

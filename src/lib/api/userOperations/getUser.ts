@@ -6,7 +6,7 @@
  * @author Zhaoyu Guo
  */
 
-import { isAuthenticated, verifyToken } from "@/lib/api/user/auth/authentication";
+import { isAuthenticated, verifyToken } from "@/lib/api/auth/authentication";
 import UserModel from "@/models/UserModel";
 import { GetUser, UserResponse } from "@/typings/user";
 import { StatusCodes } from "http-status-codes";

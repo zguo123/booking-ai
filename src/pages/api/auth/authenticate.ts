@@ -6,7 +6,7 @@
  * @author Zhaoyu Guo
  */
 
-import { authenticate } from "@/lib/api/user/auth/authentication";
+import { authenticate } from "@/lib/api/auth/authentication";
 import { AuthenticateUserHandler } from "@/typings/user";
 import { StatusCodes } from "http-status-codes";
 

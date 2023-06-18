@@ -6,7 +6,7 @@
  * @author Zhaoyu Guo
  */
 
-import { logout } from "@/lib/api/user/auth/authentication";
+import { logout } from "@/lib/api/auth/authentication";
 import { LogoutUserHandler } from "@/typings/user";
 
 const logoutUserHandler: LogoutUserHandler = async (req, res) => {
