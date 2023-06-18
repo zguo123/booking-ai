@@ -30,9 +30,9 @@ export default function ServiceCheckbox({
       cursor="pointer"
     >
       <CardBody
-        w="full"
         justifyContent="space-between"
         as={HStack}
+        spacing={6}
         {...getCheckboxProps}
       >
         <input {...getInputProps()} hidden />
@@ -41,15 +41,7 @@ export default function ServiceCheckbox({
           <Heading as="h1" size="lg">
             {name}
           </Heading>
-          <Text
-            maxW={{
-              base: "80%",
-              lg: "full",
-            }}
-            isTruncated
-            fontSize="lg"
-            color="muted"
-          >
+          <Text wordBreak="break-word" fontSize="lg" color="muted">
             {description}
           </Text>
         </Stack>
