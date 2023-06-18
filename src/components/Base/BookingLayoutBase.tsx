@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  ButtonProps,
   Container,
   Heading,
 } from "@chakra-ui/react";
@@ -14,15 +15,18 @@ import {
   PersonaContainer,
   PersonaDetails,
   PersonaLabel,
-  registerFieldType,
 } from "@saas-ui/react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
 export default function BookingLayoutBase({
   children,
+  nextBtnProps,
+  backBtnProps,
 }: {
   children: React.ReactNode;
+  nextBtnProps?: ButtonProps;
+  backBtnProps?: ButtonProps;
 }) {
   const pathname = usePathname();
 
@@ -55,7 +59,7 @@ export default function BookingLayoutBase({
         <Box as="footer" borderTopWidth={1}>
           <Container maxW="full">
             <ButtonGroup
-              py={5}
+              py={3}
               size="lg"
               w="full"
               display="flex"
@@ -69,6 +73,7 @@ export default function BookingLayoutBase({
                   }}
                   variant="secondary"
                   onClick={back}
+                  {...backBtnProps}
                 >
                   Back
                 </Button>
@@ -84,6 +89,7 @@ export default function BookingLayoutBase({
                     colorScheme="blue"
                     ml="auto"
                     onClick={next}
+                    {...nextBtnProps}
                   >
                     {pathname === "/book/contact" ? "Confirm & Finish" : "Next"}
                   </Button>

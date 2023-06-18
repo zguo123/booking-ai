@@ -1,7 +1,7 @@
 import EnterInfoPage from "@/components/PageContent/Booking/EnterInfoPage";
 
 export const metadata = {
-  title: "Select date & Time",
+  title: "Enter your information",
 };
 
 export default function BookingEnterInfoPage() {

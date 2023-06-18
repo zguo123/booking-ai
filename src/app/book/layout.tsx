@@ -6,5 +6,5 @@ export default function BookingLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <BookingLayoutBase>{children}</BookingLayoutBase>;
+  return <React.Fragment>{children}</React.Fragment>;
 }

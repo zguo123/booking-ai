@@ -1,35 +1,28 @@
 "use client";
 
+import BookingLayoutBase from "@/components/Base/BookingLayoutBase";
+import { InfoIcon } from "@chakra-ui/icons";
 import {
   Container,
   Divider,
+  HStack,
   Heading,
-  InputRightAddon,
-  SimpleGrid,
-  Stack,
-  InputProps,
-  Text,
-  forwardRef,
   Input,
   InputGroup,
+  Stack,
+  Text,
+  forwardRef,
 } from "@chakra-ui/react";
-import { object, string } from "yup";
-import { yupForm } from "@saas-ui/forms/yup";
 import {
-  AutoForm,
-  BaseField,
   Field,
-  FieldProps,
   Form,
   FormLayout,
-  InputField,
   SubmitButton,
   registerFieldType,
-  useFormContext,
 } from "@saas-ui/react";
-import ReactInputMask, { Props } from "react-input-mask";
+import ReactInputMask from "react-input-mask";
 
-const MaskedInputField = registerFieldType(
+registerFieldType(
   "maskedInput",
   forwardRef(
     ({ type = "text", leftAddon, rightAddon, size, mask, ...rest }, ref) => {
@@ -70,27 +63,27 @@ export default function EnterInfoPage() {
   };
 
   return (
-    <Stack pb={4}>
-      <Stack spacing={3} pt={10}>
-        <Heading size="2xl" textAlign="center">
-          Enter your information
-        </Heading>{" "}
-        <Text fontSize="xl" color="muted" textAlign="center">
-          Please enter your information below
-        </Text>{" "}
-        <Container
-          mt={4}
-          as={Form}
-          maxW="container.lg"
-          defaultValues={{
-            name: "",
-            description: "",
-          }}
-          onSubmit={onSubmit}
-        >
-          <FormLayout spacing={4}>
-            {" "}
-            <FormLayout columns={2}>
+    <BookingLayoutBase>
+      <Stack pb={4}>
+        <Stack spacing={3} pt={10}>
+          <Heading size="2xl" textAlign="center">
+            Enter your information
+          </Heading>{" "}
+          <Text fontSize="xl" color="muted" textAlign="center">
+            Please enter your information below
+          </Text>{" "}
+          <Container
+            mt={4}
+            as={Form}
+            maxW="container.lg"
+            defaultValues={{
+              name: "",
+              description: "",
+            }}
+            onSubmit={onSubmit}
+          >
+            <FormLayout spacing={3}>
+              {" "}
               <Field
                 size="lg"
                 name="phone"
@@ -102,27 +95,59 @@ export default function EnterInfoPage() {
                   required: "Phone is required",
                 }}
                 isRequired
-              />
+              />{" "}
               <Field
-                name="description"
-                label="Description"
                 size="lg"
-                placeholder="Optional description"
+                name="email"
+                label="Email"
+                type="email"
+                help="If you want to receive a confirmation email"
               />
+              <FormLayout columns={2}>
+                <Field
+                  size="lg"
+                  name="firstName"
+                  label="First Name"
+                  rules={{
+                    required: "First Name is required",
+                  }}
+                  isRequired
+                />{" "}
+                <Field
+                  size="lg"
+                  name="lastName"
+                  label="Last Name"
+                  rules={{
+                    required: "Last Name is required",
+                  }}
+                  isRequired
+                />
+              </FormLayout>{" "}
+              <Field
+                size="lg"
+                type="textarea"
+                name="additionalNotes"
+                label="Additional Notes (optional)"
+              />
+              <Divider my={0.5} />
+              <Text fontSize="md" color="muted">
+                Upon booking, you will receive a text message to confirm your
+                appointment and an account will be created for you to manage
+                your appointments.
+              </Text>
+              <SubmitButton
+                colorScheme="blue"
+                variant="solid"
+                w="full"
+                size="lg"
+                disableIfInvalid
+              >
+                Book Appointment
+              </SubmitButton>
             </FormLayout>
-            <Divider />
-            <SubmitButton
-              colorScheme="blue"
-              variant="solid"
-              w="full"
-              size="lg"
-              disableIfInvalid
-            >
-              Book Appointment
-            </SubmitButton>
-          </FormLayout>
-        </Container>
-      </Stack>{" "}
-    </Stack>
+          </Container>
+        </Stack>{" "}
+      </Stack>
+    </BookingLayoutBase>
   );
 }
