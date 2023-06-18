@@ -14,6 +14,7 @@ import {
   PersonaContainer,
   PersonaDetails,
   PersonaLabel,
+  registerFieldType,
 } from "@saas-ui/react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
@@ -72,22 +73,21 @@ export default function BookingLayoutBase({
                   Back
                 </Button>
               )}
-              {pathname !== "/book/select-date" && (
-                <Button
-                  w={{
-                    base: "full",
-                    lg: "auto",
-                  }}
-                  variant="solid"
-                  colorScheme="blue"
-                  ml="auto"
-                  onClick={next}
-                >
-                  {pathname === "/book/contact"
-                    ? "Confirm Appointment"
-                    : "Next"}
-                </Button>
-              )}
+              {pathname !== "/book/select-date" &&
+                pathname !== "/book/contact" && (
+                  <Button
+                    w={{
+                      base: "full",
+                      lg: "auto",
+                    }}
+                    variant="solid"
+                    colorScheme="blue"
+                    ml="auto"
+                    onClick={next}
+                  >
+                    {pathname === "/book/contact" ? "Confirm & Finish" : "Next"}
+                  </Button>
+                )}
             </ButtonGroup>
           </Container>
         </Box>
