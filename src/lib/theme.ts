@@ -1,8 +1,6 @@
 import { extendTheme } from "@chakra-ui/react";
 import { theme as proTheme } from "@saas-ui/pro";
-import { theme as baseTheme } from "@saas-ui/react";
 
-import { theme as saasTheme } from "@saas-ui/theme-glass";
 
 const theme = extendTheme(
   {

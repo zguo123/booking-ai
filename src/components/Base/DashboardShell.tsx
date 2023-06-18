@@ -1,9 +1,14 @@
 "use client";
 
-import { IconButton, Spacer } from "@chakra-ui/react";
-import { Page } from "@saas-ui/pro";
+import { Button, IconButton, Spacer } from "@chakra-ui/react";
+import { Page, Toolbar } from "@saas-ui/pro";
 import { AppShell, Persona } from "@saas-ui/react";
-import { NavItem, Sidebar, SidebarSection } from "@saas-ui/sidebar";
+import {
+  NavItem,
+  Sidebar,
+  SidebarSection,
+  SidebarToggleButton,
+} from "@saas-ui/sidebar";
 import React from "react";
 
 import { SettingsIcon } from "@chakra-ui/icons";
@@ -35,6 +40,14 @@ export default function DashboardShell({
     switch (pathname) {
       case "/dashboard":
         return <></>;
+      case "/dashboard/services":
+        return (
+          <>
+            <Button variant="solid" colorScheme="primary">
+              Add Service
+            </Button>
+          </>
+        );
     }
   };
 
@@ -42,6 +55,8 @@ export default function DashboardShell({
     <AppShell
       sidebar={
         <Sidebar maxW="25% !important">
+          <SidebarToggleButton />
+
           <SidebarSection direction="row">
             {" "}
             <Persona size="sm" name="Yan Hair" />
@@ -53,7 +68,7 @@ export default function DashboardShell({
               icon={<SettingsIcon />}
             />
           </SidebarSection>
-          <SidebarSection gap={2} flex="1" overflowY="auto">
+          <SidebarSection flex="1" overflowY="auto">
             <NavItem
               size="md"
               icon={<FiHome />}
@@ -100,7 +115,11 @@ export default function DashboardShell({
         </Sidebar>
       }
     >
-      <Page title={renderTitle()} contentWidth="full">
+      <Page
+        title={renderTitle()}
+        contentWidth="full"
+        toolbar={<Toolbar>{moreActions()}</Toolbar>}
+      >
         {children}
       </Page>
     </AppShell>

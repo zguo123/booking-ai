@@ -4,9 +4,8 @@ import { CacheProvider } from "@chakra-ui/next-js";
 import { SaasProvider } from "@saas-ui/react";
 
 import theme from "@/lib/theme";
-import { Inter, Open_Sans, Raleway } from "next/font/google";
-import { ChakraProvider, ColorModeScript, extendTheme } from "@chakra-ui/react";
-import { theme as proTheme } from "@saas-ui/pro";
+import { ColorModeScript, extendTheme } from "@chakra-ui/react";
+import { Inter, Raleway } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 const raleway = Raleway({ subsets: ["latin"] });
