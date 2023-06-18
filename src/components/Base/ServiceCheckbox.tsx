@@ -17,13 +17,7 @@ export default function ServiceCheckbox({
   duration,
   ...props
 }: ServiceCheckboxProps) {
-  const {
-    state,
-    getCheckboxProps,
-    getInputProps,
-    getLabelProps,
-    htmlProps,
-  } = useCheckbox(props);
+  const { state, getCheckboxProps, getInputProps } = useCheckbox(props);
 
   return (
     <Card

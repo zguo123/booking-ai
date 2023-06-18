@@ -1,42 +1,51 @@
 "use client";
 
-import { TimeIcon } from "@chakra-ui/icons";
 import {
-  Spacer,
-  Menu,
-  MenuButton,
-  IconButton,
-  MenuList,
-  MenuItem,
-  HStack,
-  ButtonGroup,
-  Button,
-  Box,
-  Heading,
   Avatar,
-  AvatarBadge,
+  Box,
+  Button,
+  ButtonGroup,
   Container,
+  Heading,
 } from "@chakra-ui/react";
-import { Page, PageBody, PageContainer, PageHeader } from "@saas-ui/pro";
+import { PageBody, PageContainer } from "@saas-ui/pro";
 import {
   AppShell,
-  Persona,
-  PersonaAvatar,
   PersonaContainer,
   PersonaDetails,
   PersonaLabel,
-  PersonaSecondaryLabel,
-  PersonaTertiaryLabel,
 } from "@saas-ui/react";
-import { Sidebar, SidebarSection, NavItem } from "@saas-ui/sidebar";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
-import { FiHome, FiUsers } from "react-icons/fi";
 
 export default function BookingLayoutBase({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
+  const router = useRouter();
+
+  const next = () => {
+    switch (pathname) {
+      case "/book":
+        router?.push("/book/select-date");
+        break;
+    }
+  };
+
+  const back = () => {
+    switch (pathname) {
+      case "/book/select-date":
+        router?.push("/book");
+        break;
+      case "/book/contact":
+        router?.push("/book/select-date");
+        break;
+    }
+  };
+
   return (
     <AppShell
       variant="fullscreen"
@@ -47,31 +56,38 @@ export default function BookingLayoutBase({
             <ButtonGroup
               py={5}
               size="lg"
-              justifyContent={{
-                base: "flex-start",
-                md: "flex-end",
-              }}
               w="full"
+              display="flex"
+              justifyContent="space-between"
             >
-              <Button
-                w={{
-                  base: "full",
-                  lg: "auto",
-                }}
-                variant="secondary"
-              >
-                Back
-              </Button>
-              <Button
-                w={{
-                  base: "full",
-                  lg: "auto",
-                }}
-                variant="solid"
-                colorScheme="blue"
-              >
-                Next
-              </Button>{" "}
+              {pathname !== "/book" && (
+                <Button
+                  w={{
+                    base: "full",
+                    lg: "auto",
+                  }}
+                  variant="secondary"
+                  onClick={back}
+                >
+                  Back
+                </Button>
+              )}
+              {pathname !== "/book/select-date" && (
+                <Button
+                  w={{
+                    base: "full",
+                    lg: "auto",
+                  }}
+                  variant="solid"
+                  colorScheme="blue"
+                  ml="auto"
+                  onClick={next}
+                >
+                  {pathname === "/book/contact"
+                    ? "Confirm Appointment"
+                    : "Next"}
+                </Button>
+              )}
             </ButtonGroup>
           </Container>
         </Box>

@@ -1,7 +1,7 @@
 import ServicesPage from "@/components/PageContent/Booking/ServicesPage";
 
 export const metadata = {
-  title: "Your Dashboard | Booking AI",
+  title: "Select service(s)",
 };
 
 export default function BookingServicesPage() {
