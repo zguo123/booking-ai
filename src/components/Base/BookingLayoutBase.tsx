@@ -66,7 +66,12 @@ export default function BookingLayoutBase({
       px={0}
       sidebar={
         pathname === "/book/details" ? null : (
-          <Sidebar display={pathname === "/book/details" ? "none" : "block"}>
+          <Sidebar
+            display={{
+              base: "none",
+              lg: pathname === "/book/details" ? "none" : "block",
+            }}
+          >
             <SidebarSection></SidebarSection>
           </Sidebar>
         )

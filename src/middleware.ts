@@ -14,7 +14,7 @@ export const config = {
   matcher: ["/((?!api|_next|_next/static|favicon|_next/image|favicon.ico).*)"],
 };
 
-const UNAUTHENTICATED_PAGES = ["/", "/book", "/login"];
+const UNAUTHENTICATED_PAGES = ["", "/login"];
 
 const AUTH_VIEWABLE_PAGES = ["/book"];
 
@@ -43,10 +43,7 @@ export default async function middleware(
 
     const data = await response.json();
 
-    if (
-      AUTH_VIEWABLE_PAGES.includes(pathname) ||
-      AUTHENTICATED_PAGES.includes(pathname)
-    ) {
+    if (pathname?.includes("/book") || AUTHENTICATED_PAGES.includes(pathname)) {
       return NextResponse.next();
     }
 
@@ -60,7 +57,10 @@ export default async function middleware(
       return NextResponse.redirect(new URL(`/dashboard`, request.url));
     }
   } else {
-    if (!UNAUTHENTICATED_PAGES.includes(pathname)) {
+    if (
+      !UNAUTHENTICATED_PAGES.includes(pathname) &&
+      !pathname?.includes("/book")
+    ) {
       return NextResponse.redirect(new URL(`/login`, request.url));
     }
   }
