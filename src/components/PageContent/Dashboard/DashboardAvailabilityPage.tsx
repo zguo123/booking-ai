@@ -6,11 +6,10 @@ import {
 } from "@/lib/consts/appointments";
 import { formatPrice } from "@/lib/helpers/appointment";
 import { SettingsIcon } from "@chakra-ui/icons";
-import { Button, Flex, IconButton } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { DataGrid, DataGridPagination } from "@saas-ui/pro";
-import { FiMoreVertical } from "react-icons/fi";
 
-export default function HomePage() {
+export default function DashboardAvailabilityPage() {
   // convert the date to a string
 
   return (

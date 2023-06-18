@@ -18,3 +18,5 @@ export type SelectDateProps = {
   times: TimeStatusProps[];
   id: string;
 };
+
+export type ServiceItems = ServiceProps;
