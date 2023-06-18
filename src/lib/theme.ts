@@ -14,12 +14,8 @@ const theme = extendTheme(
       },
     },
 
-    fonts: {
-      heading: "var(--font-raleway)",
-      body: "var(--font-inter)",
-    },
     config: {
-      initialColorMode: "system",
+      initialColorMode: "dark",
       useSystemColorMode: true,
     },
   },

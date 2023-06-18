@@ -17,11 +17,6 @@ const BaseTheme = extendTheme(
       heading: `${raleway.style.fontFamily}, sans-serif`,
       body: `${inter.style.fontFamily}, sans-serif`,
     },
-
-    config: {
-      initialColorMode: "system",
-      useSystemColorMode: true,
-    },
   },
   theme
 );
@@ -29,10 +24,7 @@ const BaseTheme = extendTheme(
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <CacheProvider
-        speedy
-        insertionPoint={document.getElementById("__next")?.firstChild as any}
-      >
+      <CacheProvider speedy>
         <SaasProvider resetCSS theme={BaseTheme}>
           <ColorModeScript
             initialColorMode={BaseTheme.config.initialColorMode}
