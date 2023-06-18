@@ -15,14 +15,53 @@ import {
   CardBody,
   HStack,
   Tag,
+  Button,
 } from "@chakra-ui/react";
+import { DataGrid, DataGridPagination } from "@saas-ui/pro";
 
 export default function DashboardServicesPage() {
   // convert the date to a string
 
   return (
-    <Container maxW="container.xl">
-      <List p={4} as={Stack} spacing={2}>
+    <>
+      <DataGrid
+        isHoverable
+        isSelectable
+        isSortable
+        columns={[
+          {
+            id: "name",
+            header: "Service Name",
+          },
+          {
+            id: "duration",
+            header: "Service Duration",
+            enableSorting: false,
+          },
+          {
+            id: "totalPrice",
+            header: "Price",
+            enableSorting: false,
+          },
+
+          {
+            id: "actions",
+            header: "More Actions",
+
+            cell: () => <Button leftIcon={<SettingsIcon />}>Manage</Button>,
+          },
+        ]}
+        data={sampleServices.map((service) => {
+          return {
+            ...service,
+            totalPrice: formatPrice(service.price),
+            duration: `${service.duration} min`,
+          };
+        })}
+      >
+        <DataGridPagination />
+      </DataGrid>
+      {/* <List p={4} as={Stack} spacing={2}>
         {sampleServices.map((service) => (
           <ListItem as={Card} p={0} key={service.id}>
             <CardBody p={3} as={HStack} justifyContent="space-between">
@@ -61,7 +100,7 @@ export default function DashboardServicesPage() {
             </CardBody>
           </ListItem>
         ))}
-      </List>
-    </Container>
+      </List> */}
+    </>
   );
 }
