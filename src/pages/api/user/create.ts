@@ -6,7 +6,7 @@
  * @author Zhaoyu Guo
  */
 
-import createUser from "@/lib/api/user/userOperations/createUser";
+import createUser from "@/lib/api/userOperations/createUser";
 import { CreateUserHandler } from "@/typings/user";
 import { StatusCodes } from "http-status-codes";
 
