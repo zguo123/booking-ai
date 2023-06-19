@@ -33,7 +33,7 @@ const validateUsername: CheckUsername = async (username) => {
 
     // do some other checks
     if (username.length < 3) {
-      return {
+    return {
         success: false,
         status: StatusCodes.BAD_REQUEST,
         error: {

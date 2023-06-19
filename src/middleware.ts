@@ -14,11 +14,11 @@ export const config = {
   matcher: ["/((?!api|_next|_next/static|favicon|_next/image|favicon.ico).*)"],
 };
 
-const UNAUTHENTICATED_PAGES = ["", "/login"];
+const UNAUTHENTICATED_PAGES = ["/", "/login"];
 
-const AUTH_VIEWABLE_PAGES = ["/book"];
+const AUTH_VIEWABLE_PAGES = ["/"];
 
-const AUTHENTICATED_PAGES = ["/dashboard"];
+const AUTHENTICATED_PAGES = [""];
 
 export default async function middleware(
   request: NextRequest,
@@ -48,7 +48,12 @@ export default async function middleware(
       );
     }
 
-    if (pathname?.includes("/book") || AUTHENTICATED_PAGES.includes(pathname)) {
+    if (
+      pathname?.includes("/book") ||
+      pathname?.includes("/dashboard") ||
+      AUTHENTICATED_PAGES.includes(pathname) ||
+      AUTH_VIEWABLE_PAGES.includes(pathname)
+    ) {
       return NextResponse.next();
     }
 
