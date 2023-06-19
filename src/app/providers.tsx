@@ -35,6 +35,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             options={{
               environmentID: process.env
                 .NEXT_PUBLIC_FEATURE_FLAG_CLIENT_KEY as string,
+              realtime: true,
             }}
             flagsmith={flagsmith}
           >

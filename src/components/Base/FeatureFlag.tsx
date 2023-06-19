@@ -11,5 +11,6 @@ export type FeatureFlagProps = {
 export default function FeatureFlag({ feature, children }: FeatureFlagProps) {
   const featureStatus = useFlags([feature]);
 
+
   return featureStatus[feature].enabled ? <>{children}</> : <></>;
 }
