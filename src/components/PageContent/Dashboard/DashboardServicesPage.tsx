@@ -63,7 +63,7 @@ export default function DashboardServicesPage() {
       </DataGrid>
       {/* <List p={4} as={Stack} spacing={2}>
         {sampleServices.map((service) => (
-          <ListItem as={Card} p={0} key={service.id}>
+          <ListItem as={Card} p={0} key={service?._id}>
             <CardBody p={3} as={HStack} justifyContent="space-between">
               <Stack spacing={1}>
                 <Tag size="sm" w="fit-content" colorScheme="primary">

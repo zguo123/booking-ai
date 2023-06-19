@@ -13,7 +13,7 @@ import { APIRet, Override } from "./global";
 
 // database schemas
 export interface IUserItems {
-  _id?: string;
+  __id?: string;
   firstName: string;
   lastName: string;
   lastLogin?: Date;

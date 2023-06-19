@@ -29,7 +29,7 @@ export const sampleDates: SelectDateProps[] = [
         status: "available",
       },
     ],
-    id: "1",
+    _id: "1",
   },
   {
     date: new Date("2023-06-19"),
@@ -59,7 +59,7 @@ export const sampleDates: SelectDateProps[] = [
         status: "booked",
       },
     ],
-    id: "2",
+    _id: "2",
   },
   {
     date: new Date("2023-06-20"),
@@ -89,6 +89,6 @@ export const sampleDates: SelectDateProps[] = [
         status: "available",
       },
     ],
-    id: "3",
+    _id: "3",
   },
 ];

@@ -28,9 +28,9 @@ export default function ServicesPage() {
         <Stack mt={10} spacing={4}>
           {sampleServices.map((service) => (
             <ServiceCheckbox
-              key={service.id}
+              key={service?._id}
               {...service}
-              {...getCheckboxProps({ value: service.id })}
+              {...getCheckboxProps({ value: service?._id })}
             />
           ))}
         </Stack>

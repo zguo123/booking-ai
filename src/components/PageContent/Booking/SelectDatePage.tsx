@@ -123,7 +123,7 @@ export default function SelectDatePage() {
                         md: "lg",
                       }}
                       variant="outline"
-                      key={`${time?.time}-${date.id}`}
+                      key={`${time?.time}-${date?._id}`}
                       isActive={
                         time.status === "available" && time.time === newTime
                       }

@@ -2,7 +2,7 @@ import { ColumnDef } from "@saas-ui/pro";
 import { ServiceItems } from "./service";
 
 export type AppointmentItems = {
-  id: string;
+  _id?: string;
   name: string;
   email: string;
   phone: string;
