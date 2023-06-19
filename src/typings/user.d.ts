@@ -21,6 +21,11 @@ export interface IUserItems {
   username: string;
 }
 
+export type UserParams = Pick<
+  IUserItems,
+  "username" | "email" | "firstName" | "lastName"
+>;
+
 export type UserItemsWithoutId = Omit<IUserItems, "_id">;
 
 // documents
@@ -34,6 +39,15 @@ export type UserResponse = APIRet & {
 
 // request types
 export type AuthenticationRequest = Override<NextApiRequest>;
+
+export type CheckUsernameRequest = Override<
+  NextApiRequest,
+  {
+    body: {
+      username: string;
+    };
+  }
+>;
 
 export type CreateUserRequest = Override<
   NextApiRequest,
@@ -62,6 +76,11 @@ export type LogoutUserHandler = (
   res: NextApiResponse<UserResponse>
 ) => unknown;
 
+export type CheckUsernameHandler = (
+  req: CheckUsernameRequest,
+  res: NextApiResponse<UserResponse>
+) => unknown;
+
 export type GetUserHandlerInfoHandler = (
   req: GetUserRequest,
   res: NextApiResponse<UserResponse>
@@ -87,6 +106,8 @@ export type LogoutUser = (
   res: NextApiResponse<UserResponse>,
   token: string
 ) => Promise<UserResponse>;
+
+export type CheckUsername = (username: string) => Promise<UserResponse>;
 
 export type CheckIsAuthenticated = (token: string) => boolean;
 

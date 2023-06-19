@@ -7,7 +7,7 @@
  */
 
 import { ErrorType } from "@/typings/global";
-import { IUserItems, UserResponse } from "@/typings/user";
+import { IUserItems, UserParams, UserResponse } from "@/typings/user";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 export const userApi = createApi({
@@ -17,7 +17,7 @@ export const userApi = createApi({
   }),
   tagTypes: ["User"],
   endpoints: (builder) => ({
-    createUser: builder.mutation<UserResponse, IUserItems>({
+    createUser: builder.mutation<UserResponse, UserParams>({
       query: (user) => ({
         url: "/create",
         method: "POST",
@@ -27,6 +27,19 @@ export const userApi = createApi({
       }),
       invalidatesTags: ["User"],
 
+      transformErrorResponse: (error: any): ErrorType["message"] => {
+        return error?.data?.error?.message;
+      },
+    }),
+
+    checkUsername: builder.mutation<UserResponse, string>({
+      query: (username) => ({
+        url: "/check-username",
+        method: "POST",
+        body: {
+          username: username,
+        },
+      }),
       transformErrorResponse: (error: any): ErrorType["message"] => {
         return error?.data?.error?.message;
       },
@@ -42,4 +55,8 @@ export const userApi = createApi({
   }),
 });
 
-export const { useCreateUserMutation, useGetUserQuery } = userApi;
+export const {
+  useCreateUserMutation,
+  useGetUserQuery,
+  useCheckUsernameMutation,
+} = userApi;
