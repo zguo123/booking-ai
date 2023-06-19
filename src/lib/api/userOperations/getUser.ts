@@ -35,7 +35,7 @@ const getUser: GetUser = async (token) => {
     if (tokenUser) {
       user = await UserModel.findOne({
         email: tokenUser.email,
-      });
+      }).lean();
     }
 
     return {

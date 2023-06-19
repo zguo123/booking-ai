@@ -8,6 +8,9 @@
 
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "./lib/api/auth/authentication";
+import flagsmith from "flagsmith/next-middleware";
+import logger from "./lib/logger";
+import { UserResponse } from "./typings/user";
 
 // Limit the middleware to paths starting with `/api/`
 export const config = {
@@ -41,12 +44,23 @@ export default async function middleware(
       }
     );
 
-    const data = await response.json();
+    const data = (await response.json()) as UserResponse;
     if (!data?.user && pathname !== "/onboarding/register") {
       return NextResponse.redirect(
         new URL(`/onboarding/register`, request.url)
       );
     }
+
+    await flagsmith.init({
+      environmentID: process.env.NEXT_PUBLIC_FEATURE_FLAG_CLIENT_KEY || "",
+      identity: data?.user?.username as string,
+      enableAnalytics: true,
+      traits: {
+        Email: data?.user?.email as string,
+        Username: data?.user?.username as string,
+        "Full Name": `${data?.user?.firstName} ${data?.user?.lastName}`,
+      },
+    });
 
     if (
       pathname?.includes("/book") ||

@@ -1,7 +1,14 @@
 "use client";
 import OnboardingForm from "@/components/Auth/OnboardingForm";
 import useAuthInfo from "@/hooks/useAuthInfo";
-import { Button, Container, Heading, Stack, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Container,
+  Heading,
+  Skeleton,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import {
   BackButton,
   PageBody,
@@ -13,7 +20,7 @@ import { Card, CardBody } from "@saas-ui/react";
 import Link from "next/link";
 
 export default function OnboardingPage() {
-  const { signOut, authUser: user } = useAuthInfo();
+  const { signOut, authUser: user, isLoading } = useAuthInfo();
 
   return (
     <PageContainer height="full">
@@ -24,7 +31,9 @@ export default function OnboardingPage() {
             <Text size="xs" color="muted">
               Logged in as
             </Text>
-            <Text>{user?.email}</Text>
+            <Skeleton isLoaded={!isLoading}>
+              <Text>{user?.email}</Text>
+            </Skeleton>
           </Stack>
         }
         nav={<BackButton />}

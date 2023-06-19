@@ -33,7 +33,7 @@ export type UserDocument = Document<Types.ObjectId> & UserItemsWithoutId;
 
 // response data
 export type UserResponse = APIRet & {
-  user?: UserDocument | null;
+  user?: IUserItems | null;
   authUser?: MagicUserMetadata | null;
 };
 

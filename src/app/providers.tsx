@@ -7,10 +7,12 @@ import theme from "@/lib/theme";
 import { ColorModeScript, extendTheme } from "@chakra-ui/react";
 import { Inter, Raleway } from "next/font/google";
 
-// redux
-import { Provider } from "react-redux";
-import { store } from "@/redux/ reduxStore";
+import flagsmith from "flagsmith";
+import { FlagsmithProvider } from "flagsmith/react";
 
+// redux
+import { store } from "@/redux/ reduxStore";
+import { Provider } from "react-redux";
 const inter = Inter({ subsets: ["latin"] });
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -29,12 +31,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <>
       <CacheProvider>
         <SaasProvider theme={BaseTheme}>
-          <Provider store={store}>
-            <ColorModeScript
-              initialColorMode={BaseTheme.config.initialColorMode}
-            />
-            {children}
-          </Provider>
+          <FlagsmithProvider
+            options={{
+              environmentID: process.env
+                .NEXT_PUBLIC_FEATURE_FLAG_CLIENT_KEY as string,
+            }}
+            flagsmith={flagsmith}
+          >
+            <Provider store={store}>
+              <ColorModeScript
+                initialColorMode={BaseTheme.config.initialColorMode}
+              />
+              {children}
+            </Provider>
+          </FlagsmithProvider>
         </SaasProvider>
       </CacheProvider>
     </>

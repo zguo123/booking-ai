@@ -36,7 +36,19 @@ const userSchema = new Schema<IUserItems>({
       message: `Email is not valid`,
     },
   },
-  
+
+  username: {
+    type: String,
+    unique: true,
+
+    required: [true, "Username is required"],
+    validate: {
+      validator: (v: string) =>
+        validator.isAlphanumeric(v, "en-US", { ignore: " " }),
+      message: `Username must be only letters and numbers`,
+    },
+  },
+
   lastLogin: {
     type: Date,
     default: new Date(),

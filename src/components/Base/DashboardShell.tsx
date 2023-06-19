@@ -1,6 +1,17 @@
 "use client";
 
-import { Button, IconButton, Spacer } from "@chakra-ui/react";
+import {
+  Button,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  Spacer,
+  Skeleton,
+  Icon,
+} from "@chakra-ui/react";
 import { Page, Toolbar } from "@saas-ui/pro";
 import { AppShell, Persona } from "@saas-ui/react";
 import {
@@ -14,14 +25,23 @@ import React from "react";
 import { SettingsIcon } from "@chakra-ui/icons";
 import { usePathname } from "next/navigation";
 import { BsClock, BsFillGridFill, BsGear } from "react-icons/bs";
-import { FiHome } from "react-icons/fi";
+import { FiHome, FiLogOut } from "react-icons/fi";
+import useAuthInfo from "@/hooks/useAuthInfo";
+import Link from "next/link";
+import { useFlags, useFlagsmith } from "flagsmith/react";
+import FeatureFlag from "./FeatureFlag";
 
 export default function DashboardShell({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // auth info
+  const { user, isLoading, signOut } = useAuthInfo();
+
   const pathname = usePathname();
+
+  const flags = useFlags(["add_service"]); // only causes re-render if specified flag values / traits change
 
   const renderTitle = () => {
     switch (pathname) {
@@ -43,9 +63,11 @@ export default function DashboardShell({
       case "/dashboard/services":
         return (
           <>
-            <Button variant="solid" colorScheme="primary">
-              Add Service
-            </Button>
+            <FeatureFlag feature="add_service">
+              <Button variant="solid" colorScheme="primary">
+                Add Service
+              </Button>
+            </FeatureFlag>
           </>
         );
     }
@@ -58,15 +80,33 @@ export default function DashboardShell({
           <SidebarToggleButton />
 
           <SidebarSection direction="row">
-            {" "}
-            <Persona size="sm" name="Yan Hair" />
-            <Spacer />
-            <IconButton
-              aria-label="Settings"
-              variant="ghost"
-              size="md"
-              icon={<SettingsIcon />}
-            />
+            <Skeleton isLoaded={!isLoading}>
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  variant="ghost"
+                  textAlign="left"
+                  py="2"
+                  height="auto"
+                >
+                  {" "}
+                  <Persona
+                    size="sm"
+                    name={`${user?.firstName} ${user?.lastName}`}
+                    secondaryLabel={user?.email}
+                  />
+                </MenuButton>
+                <MenuList>
+                  <MenuItem
+                    as={Link}
+                    href={signOut}
+                    icon={<Icon as={FiLogOut} />}
+                  >
+                    Logout
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Skeleton>
           </SidebarSection>
           <SidebarSection flex="1" overflowY="auto">
             <NavItem
