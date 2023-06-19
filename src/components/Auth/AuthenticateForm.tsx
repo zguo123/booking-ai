@@ -1,14 +1,9 @@
-import React from "react";
 import {
-  AutoForm,
   Field,
-  Fields,
   Form,
   FormLayout,
-  SubmitButton,
+  SubmitButton
 } from "@saas-ui/react";
-import { yupForm } from "@saas-ui/forms/yup";
-import { object, string } from "yup";
 import { useRouter } from "next/navigation";
 import validator from "validator";
 
