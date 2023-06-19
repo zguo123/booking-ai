@@ -10,6 +10,7 @@ import {
 import { yupForm } from "@saas-ui/forms/yup";
 import { object, string } from "yup";
 import { useRouter } from "next/navigation";
+import validator from "validator";
 
 export default function AuthenticateForm() {
   const router = useRouter();
@@ -27,35 +28,31 @@ export default function AuthenticateForm() {
       }}
       onSubmit={onSubmit}
     >
-      <FormLayout>
+      <FormLayout spacing={5}>
         <Field
           name="email"
           label="Email"
-          size="md"
+          size="lg"
           type="email"
           placeholder="Email"
           isRequired
           rules={{
             required: "Email is required",
+            validate: (value: string) => {
+              if (!validator.isEmail(value)) return "Email is invalid";
+            },
           }}
         />{" "}
-        <SubmitButton variant="solid" w="full" size="md" disableIfInvalid>
-          Login
+        <SubmitButton
+          variant="solid"
+          colorScheme="primary"
+          w="full"
+          size="lg"
+          disableIfInvalid
+        >
+          Continue with Email
         </SubmitButton>
       </FormLayout>
     </Form>
-
-    // <AutoForm
-    //   defaultValues={{
-    //     title: "",
-    //   }}
-    //   onSubmit={() => null}
-    //   submitLabel={null}
-    //   {...yupForm(schema)}
-    // >
-    //   <SubmitButton colorScheme="secondary" w="full" size="md">
-    //     Continue with Email
-    //   </SubmitButton>
-    // </AutoForm>
   );
 }

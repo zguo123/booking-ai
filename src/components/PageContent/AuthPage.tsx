@@ -1,20 +1,28 @@
 "use client";
-import { Center, Container, Heading } from "@chakra-ui/react";
+import { Center, Container, Heading, Stack, Text } from "@chakra-ui/react";
 import { CardHeader, Card, CardBody } from "@saas-ui/react";
 import { useRouter } from "next/navigation";
 import AuthenticateForm from "../Auth/AuthenticateForm";
 
 export default function HomePage() {
-  const router = useRouter();
-
   return (
     <>
       <Container as={Center} h="full">
-        <Card p={4}>
-          <CardHeader justifyContent="center">
-            <Heading w="md" textAlign="center" size="lg">
-              Welcome to Booking AI
-            </Heading>
+        <Card p={5}>
+          <CardHeader>
+            <Stack spacing={1}>
+              <Heading
+                flexDir="column"
+                w={{
+                  base: "full",
+                  lg: "md",
+                }}
+                textAlign="center"
+                size="xl"
+              >
+                Welcome Back!
+              </Heading>
+            </Stack>
           </CardHeader>
           <CardBody>
             <AuthenticateForm />
