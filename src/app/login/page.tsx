@@ -1,4 +1,4 @@
-import AuthPage from "@/components/PageContent/AuthPage";
+import AuthPage from "@/components/PageContent/Auth/AuthPage";
 import React from "react";
 
 export const metadata = {

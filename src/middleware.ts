@@ -42,15 +42,14 @@ export default async function middleware(
     );
 
     const data = await response.json();
-
-    if (pathname?.includes("/book") || AUTHENTICATED_PAGES.includes(pathname)) {
-      return NextResponse.next();
-    }
-
     if (!data?.user && pathname !== "/onboarding/register") {
       return NextResponse.redirect(
         new URL(`/onboarding/register`, request.url)
       );
+    }
+
+    if (pathname?.includes("/book") || AUTHENTICATED_PAGES.includes(pathname)) {
+      return NextResponse.next();
     }
 
     if (data?.user && pathname !== "/dashboard") {

@@ -45,6 +45,8 @@
     "mongoose": "^7.3.0",
     "mongoose-autopopulate": "^1.0.1",
     "next": "13.4.6",
+    "pino": "^8.14.1",
+    "pino-pretty": "^10.0.0",
     "react": "18.2.0",
     "react-big-calendar": "^1.8.1",
     "react-dom": "18.2.0",

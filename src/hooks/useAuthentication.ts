@@ -9,7 +9,7 @@
 import { useGetUserQuery } from "@/redux/services/user";
 import { UserResponse } from "@/typings/user";
 
-const useAuth = (): {
+const useAuthentication = (): {
   user: UserResponse["user"];
   authUser: UserResponse["authUser"];
   isLoading: boolean;
@@ -25,4 +25,4 @@ const useAuth = (): {
   };
 };
 
-export default useAuth;
+export default useAuthentication;

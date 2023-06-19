@@ -14,6 +14,7 @@ import {
   removeTokenCookie,
   setTokenCookie,
 } from "@/lib/cookies";
+import logger from "@/lib/logger";
 import UserModel from "@/models/UserModel";
 import {
   AuthenticateUser,
@@ -108,6 +109,7 @@ export const authenticate: AuthenticateUser = async (token, res) => {
       authUser: user,
     };
   } catch (error: any) {
+    logger.error(`[AUTHENTICATION] ${error.message}`);
     return {
       success: false,
       error: {

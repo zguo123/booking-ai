@@ -2,7 +2,7 @@
 import { Center, Container, Heading, Stack, Text } from "@chakra-ui/react";
 import { CardHeader, Card, CardBody } from "@saas-ui/react";
 import { useRouter } from "next/navigation";
-import AuthenticateForm from "../Auth/AuthenticateForm";
+import AuthenticateForm from "../../Auth/AuthenticateForm";
 
 export default function HomePage() {
   return (

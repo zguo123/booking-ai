@@ -7,11 +7,14 @@
  */
 
 import { authenticate } from "@/lib/api/auth/authentication";
+import dbConnect from "@/lib/dbConnect";
 import { AuthenticateUserHandler } from "@/typings/user";
 import { StatusCodes } from "http-status-codes";
 
 const authenticateUser: AuthenticateUserHandler = async (req, res) => {
   const { method } = req;
+
+  await dbConnect();
 
   switch (method) {
     case "POST":
