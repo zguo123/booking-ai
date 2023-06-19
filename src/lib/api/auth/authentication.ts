@@ -14,6 +14,7 @@ import {
   removeTokenCookie,
   setTokenCookie,
 } from "@/lib/cookies";
+import dbConnect from "@/lib/dbConnect";
 import logger from "@/lib/logger";
 import UserModel from "@/models/UserModel";
 import {
@@ -88,6 +89,8 @@ export const verifyToken: VerifySecureToken = async (token) => {
  */
 export const authenticate: AuthenticateUser = async (token, res) => {
   try {
+    await dbConnect();
+
     const user = await retrieveUserData(token);
 
     const userProfile = await UserModel.findOne({ email: user.email });

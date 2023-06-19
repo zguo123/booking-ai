@@ -21,6 +21,8 @@ const retrieveAuthenticatedUser: GetUserHandlerInfoHandler = async (
   await dbConnect();
   const { method } = req;
 
+
+
   switch (method) {
     case "GET":
       const token =

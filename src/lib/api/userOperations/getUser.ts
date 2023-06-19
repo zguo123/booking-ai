@@ -7,12 +7,15 @@
  */
 
 import { isAuthenticated, verifyToken } from "@/lib/api/auth/authentication";
+import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/models/UserModel";
 import { GetUser, UserResponse } from "@/typings/user";
 import { StatusCodes } from "http-status-codes";
 
 const getUser: GetUser = async (token) => {
   try {
+    await dbConnect();
+
     if (!isAuthenticated(token)) {
       return {
         success: false,

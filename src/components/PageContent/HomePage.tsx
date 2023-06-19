@@ -1,6 +1,6 @@
 "use client";
 
-import useAuthentication from "@/hooks/useAuthentication";
+import useAuthInfo from "@/hooks/useAuthInfo";
 import {
   Button,
   ButtonGroup,
@@ -22,7 +22,6 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 export default function HomePage() {
-  const { authUser, } = useAuthentication();
   return (
     <Center height="100vh">
       <Container>

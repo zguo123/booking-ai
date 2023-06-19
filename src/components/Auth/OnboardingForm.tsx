@@ -1,14 +1,13 @@
 "use client";
 
-import useAuthentication from "@/hooks/useAuthentication";
+import useAuthInfo from "@/hooks/useAuthInfo";
 import {
   useCheckUsernameMutation,
   useCreateUserMutation,
 } from "@/redux/services/user";
-import { IUserItems, UserParams } from "@/typings/user";
+import { UserParams } from "@/typings/user";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import { InputRightElement, useBoolean } from "@chakra-ui/react";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
+import { InputRightElement } from "@chakra-ui/react";
 import {
   Field,
   Form,
@@ -16,15 +15,13 @@ import {
   Loader,
   SubmitButton,
   UseFormReturn,
-  useFormContext,
 } from "@saas-ui/react";
 import { debounce } from "lodash";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
-import validator from "validator";
+import { useRef } from "react";
 
 export default function OnboardingForm() {
-  const { authUser } = useAuthentication();
+  const { authUser } = useAuthInfo();
 
   const router = useRouter();
 
