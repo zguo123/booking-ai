@@ -12,10 +12,10 @@ export default async (
     // find service name
     const service = await ServiceModel.findOne({ name: serviceData.name });
 
-    const errors: { [key in keyof ServiceRequestBody]: string } = {
-      name: "",
-      price: "",
-      duration: "",
+    const errors: { [key in keyof ServiceRequestBody]: string | undefined } = {
+      name: undefined,
+      price: undefined,
+      duration: undefined,
     };
 
     // no values
@@ -46,20 +46,21 @@ export default async (
     else if (service) {
       errors.name = "Service name must be unique";
     }
+    const doesHaveErrors = Object.values(errors).some((error) => !!error);
 
-    // create
-    await ServiceModel.create({
-      ...serviceData,
-      user: userId,
-    });
+    if (!doesHaveErrors) {
+      // create
+      await ServiceModel.create({
+        ...serviceData,
+        user: userId,
+      });
+    }
 
     return {
-      service: await ServiceModel.find({ user: userId }).lean(),
-      success: Object.keys(errors).length === 0,
-      status:
-        StatusCodes[Object.keys(errors).length === 0 ? "BAD_REQUEST" : "OK"],
+      success: !doesHaveErrors,
+      status: StatusCodes[doesHaveErrors ? "BAD_REQUEST" : "OK"],
       error: {
-        message: Object.keys(errors).length === 0 ? "" : errors,
+        message: !doesHaveErrors ? "" : errors,
       },
     };
   } catch (err) {

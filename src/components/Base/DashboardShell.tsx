@@ -1,16 +1,16 @@
 "use client";
 
 import {
+  Breadcrumb,
+  BreadcrumbItem,
   Button,
-  IconButton,
+  Icon,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Text,
-  Spacer,
   Skeleton,
-  Icon,
+  Text,
 } from "@chakra-ui/react";
 import { Page, Toolbar } from "@saas-ui/pro";
 import { AppShell, Persona } from "@saas-ui/react";
@@ -22,14 +22,14 @@ import {
 } from "@saas-ui/sidebar";
 import React from "react";
 
-import { SettingsIcon } from "@chakra-ui/icons";
+import useAuthInfo from "@/hooks/useAuthInfo";
+import { useFlags } from "flagsmith/react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BsClock, BsFillGridFill, BsGear } from "react-icons/bs";
 import { FiHome, FiLogOut } from "react-icons/fi";
-import useAuthInfo from "@/hooks/useAuthInfo";
-import Link from "next/link";
-import { useFlags, useFlagsmith } from "flagsmith/react";
 import FeatureFlag from "./FeatureFlag";
+import CreateServiceForm from "../DashboardComponents/CreateServiceForm";
 
 export default function DashboardShell({
   children,
@@ -49,6 +49,17 @@ export default function DashboardShell({
         return "Your Appointments";
       case "/dashboard/services":
         return "Your Services";
+      case "/dashboard/services/create":
+        return (
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link href="/dashboard/services">Services</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem color="muted">
+              <Text>Create</Text>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        );
       case "/dashboard/availability":
         return "Your Availability";
       case "/dashboard/integrations":
@@ -63,11 +74,7 @@ export default function DashboardShell({
       case "/dashboard/services":
         return (
           <>
-            <FeatureFlag feature="add_service">
-              <Button variant="solid" colorScheme="primary">
-                Add Service
-              </Button>
-            </FeatureFlag>
+            <CreateServiceForm />
           </>
         );
     }

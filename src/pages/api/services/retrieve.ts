@@ -1,5 +1,6 @@
 import createService from "@/lib/api/service/createService";
 import getServices from "@/lib/api/service/getServices";
+import dbConnect from "@/lib/dbConnect";
 import { GenericServiceHandler, ServiceRequestBody } from "@/typings/service";
 import { StatusCodes } from "http-status-codes";
 
@@ -8,6 +9,8 @@ const retrieveAllServices: GenericServiceHandler = async (req, res) => {
     method,
     query: { userId },
   } = req;
+
+  await dbConnect();
 
   switch (method) {
     case "GET":

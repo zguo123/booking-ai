@@ -1,7 +1,10 @@
 "use client";
 
+import useAuthInfo from "@/hooks/useAuthInfo";
 import { sampleServices } from "@/lib/consts/services";
 import { formatPrice } from "@/lib/helpers/appointment";
+import { useRetrieveServicesQuery } from "@/redux/services/service";
+import { ServiceItems } from "@/typings/service";
 import { DeleteIcon, EditIcon, SettingsIcon } from "@chakra-ui/icons";
 import {
   Container,
@@ -16,11 +19,19 @@ import {
   HStack,
   Tag,
   Button,
+  Flex,
+  Center,
 } from "@chakra-ui/react";
 import { DataGrid, DataGridPagination } from "@saas-ui/pro";
+import { EmptyState } from "@saas-ui/react";
+import { FiUsers } from "react-icons/fi";
 
 export default function DashboardServicesPage() {
   // convert the date to a string
+
+  const { user } = useAuthInfo();
+
+  const { data: services } = useRetrieveServicesQuery(user?._id as string);
 
   return (
     <>
@@ -51,7 +62,7 @@ export default function DashboardServicesPage() {
             cell: () => <Button leftIcon={<SettingsIcon />}>Manage</Button>,
           },
         ]}
-        data={sampleServices.map((service) => {
+        data={((services?.service as ServiceItems[]) || [])?.map((service) => {
           return {
             ...service,
             totalPrice: formatPrice(service.price),
@@ -61,46 +72,6 @@ export default function DashboardServicesPage() {
       >
         <DataGridPagination />
       </DataGrid>
-      {/* <List p={4} as={Stack} spacing={2}>
-        {sampleServices.map((service) => (
-          <ListItem as={Card} p={0} key={service?._id}>
-            <CardBody p={3} as={HStack} justifyContent="space-between">
-              <Stack spacing={1}>
-                <Tag size="sm" w="fit-content" colorScheme="primary">
-                  {service.name}
-                </Tag>
-
-                <Text fontSize="sm" color="muted">
-                  {service.description || "No description"}
-                </Text>
-              </Stack>
-              <HStack spacing={4}>
-                <Stack spacing={0}>
-                  <Text fontSize="xl" fontWeight="bold" textAlign="right">
-                    {formatPrice(service.price)}
-                  </Text>
-                  <Text fontSize="sm" color="muted" textAlign="right">
-                    {service.duration} min
-                  </Text>
-                </Stack>
-                <HStack spacing={2}>
-                  <IconButton
-                    size="lg"
-                    aria-label="Edit service"
-                    icon={<EditIcon />}
-                  />{" "}
-                  <IconButton
-                    size="lg"
-                    colorScheme="red"
-                    aria-label="Delete service"
-                    icon={<DeleteIcon />}
-                  />
-                </HStack>
-              </HStack>
-            </CardBody>
-          </ListItem>
-        ))}
-      </List> */}
     </>
   );
 }

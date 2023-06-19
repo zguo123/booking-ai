@@ -2,7 +2,7 @@ export type ErrorType = {
   message:
     | string
     | {
-        [key: string]: string;
+        [key: string]: string | undefined;
       };
 };
 

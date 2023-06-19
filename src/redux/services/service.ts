@@ -1,3 +1,4 @@
+import { ErrorType } from "@/typings/global";
 import { ServiceAPIResponse, ServiceRequestBody } from "@/typings/service";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
@@ -19,6 +20,15 @@ export const servicesApi = createApi({
       providesTags: ["Services"],
     }),
 
+    deleteService: builder.mutation<ServiceAPIResponse, string>({
+      query: (serviceId) => ({
+        url: `/options/${serviceId}/delete`,
+        method: "DELETE",
+      }),
+
+      invalidatesTags: ["Services"],
+    }),
+
     createService: builder.mutation<
       ServiceAPIResponse,
       ServiceRequestBody & { userId: string }
@@ -32,6 +42,9 @@ export const servicesApi = createApi({
         },
       }),
       invalidatesTags: ["Services"],
+      transformErrorResponse: (error: any): ErrorType["message"] => {
+        return error?.data?.error?.message;
+      },
     }),
   }),
 });
@@ -39,4 +52,5 @@ export const servicesApi = createApi({
 export const {
   useRetrieveServicesQuery,
   useCreateServiceMutation,
+  useDeleteServiceMutation,
 } = servicesApi;
