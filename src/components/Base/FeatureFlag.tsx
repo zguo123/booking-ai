@@ -1,5 +1,4 @@
 "use client";
-import { Box } from "@chakra-ui/react";
 import { useFlags } from "flagsmith/react";
 import React from "react";
 

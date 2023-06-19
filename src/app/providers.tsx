@@ -7,12 +7,14 @@ import theme from "@/lib/theme";
 import { ColorModeScript, extendTheme } from "@chakra-ui/react";
 import { Inter, Raleway } from "next/font/google";
 
-import flagsmith from "flagsmith";
+import flagsmith from "flagsmith/isomorphic";
 import { FlagsmithProvider } from "flagsmith/react";
 
 // redux
 import { store } from "@/redux/ reduxStore";
 import { Provider } from "react-redux";
+import { IFlagsmith, IState } from "flagsmith/types";
+
 const inter = Inter({ subsets: ["latin"] });
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -26,7 +28,13 @@ const BaseTheme = extendTheme(
   theme
 );
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({
+  children,
+  flagSmith,
+}: {
+  children: React.ReactNode;
+  flagSmith: IState;
+}) {
   return (
     <>
       <CacheProvider>
@@ -38,6 +46,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
               realtime: true,
             }}
             flagsmith={flagsmith}
+            serverState={flagSmith}
           >
             <Provider store={store}>
               <ColorModeScript
