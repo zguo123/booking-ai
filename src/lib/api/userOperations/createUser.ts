@@ -18,7 +18,7 @@ const createUser: CreateUser = async (user) => {
     return {
       success: true,
       status: StatusCodes.CREATED,
-      user: newUser,
+      user: newUser.toObject(),
     };
   } catch (error: any) {
     const errors = await errorHandler(error?.message, error?.code);
