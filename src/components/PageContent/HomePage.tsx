@@ -1,5 +1,6 @@
 "use client";
 
+import useAuthentication from "@/hooks/useAuthentication";
 import {
   Button,
   ButtonGroup,
@@ -19,7 +20,9 @@ import {
   CardFooter,
 } from "@saas-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 export default function HomePage() {
+  const { authUser, } = useAuthentication();
   return (
     <Center height="100vh">
       <Container>
@@ -35,7 +38,7 @@ export default function HomePage() {
                 </Text>
               </Stack>
               <ButtonGroup size="md" w="full">
-                <Button w="full" variant="secondary">
+                <Button w="full" as={Link} href="/login" variant="secondary">
                   Login
                 </Button>
                 <Button as={Link} href="/book" w="full" colorScheme="blue">
