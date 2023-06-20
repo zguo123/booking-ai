@@ -1,4 +1,5 @@
 import { days } from "@/lib/consts/days";
+import { formatMonthYear } from "@/lib/dateHelpers";
 import logger from "@/lib/logger";
 import AvailabilityModel from "@/models/AvailabilityModel";
 import {
@@ -13,9 +14,7 @@ import {
   parseTime,
   today,
 } from "@internationalized/date";
-import { useStepFormContext } from "@saas-ui/react";
 import { StatusCodes } from "http-status-codes";
-import { formatMonthYear, getMonthAsName } from "@/lib/dateHelpers";
 
 const validateDate = (
   workingHourInfo: Pick<WorkingHours, "from" | "to" | "isClosed">,
