@@ -1,6 +1,9 @@
+import AvailabilityDetailsPage from "@/components/PageContent/Dashboard/AvailabilityDetailsPage";
 import { formatMonthYear } from "@/lib/dateHelpers";
 import dbConnect from "@/lib/dbConnect";
+import { sanitizeSchedule } from "@/lib/scheduleHelpers";
 import AvailabilityModel from "@/models/AvailabilityModel";
+import { AvailabilityItems } from "@/typings/availability";
 import { Metadata } from "next";
 
 type ScheduleDetailPageProps = {
@@ -19,8 +22,6 @@ export async function generateMetadata({
   // fetch data
   const schedule = await AvailabilityModel.findById(id).lean();
 
-  console.log(schedule?.monthYear);
-
   if (!schedule) {
     return {
       title: `Schedule Not Found | Booking AI`,
@@ -36,8 +37,18 @@ export async function generateMetadata({
   };
 }
 
-export default function ScheduleDetailsPage({
+export default async function ScheduleDetailsPage({
   params,
 }: ScheduleDetailPageProps) {
-  return <></>;
+  await dbConnect();
+  const schedule = await AvailabilityModel.findById(params.scheduleId).lean();
+
+  const scheduleData = sanitizeSchedule(schedule as AvailabilityItems);
+
+  return (
+    <AvailabilityDetailsPage
+      scheduleId={params.scheduleId}
+      scheduleData={scheduleData as AvailabilityItems}
+    />
+  );
 }

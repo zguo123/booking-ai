@@ -60,7 +60,7 @@ export default function DashboardShell({
   // service info
   const [
     retrieveService,
-    { data: serviceData, isLoading: isSurveyLoading },
+    { data: serviceData, isLoading: isServiceLoading },
   ] = useLazyRetrieveOneServiceQuery({
     refetchOnReconnect: true,
   });
@@ -120,7 +120,7 @@ export default function DashboardShell({
                 minW="20"
                 isLoaded={
                   !!(serviceData?.service as ServiceItems)?.name &&
-                  !isSurveyLoading &&
+                  !isServiceLoading &&
                   (serviceData?.service as ServiceItems)?._id ===
                     params?.serviceId
                 }
@@ -162,7 +162,7 @@ export default function DashboardShell({
                 minW="20"
                 isLoaded={
                   !!(scheduleData?.schedules as AvailabilityItems)?.monthYear &&
-                  !isSurveyLoading &&
+                  !isServiceLoading &&
                   (scheduleData?.schedules as AvailabilityItems)?._id ===
                     params?.scheduleId
                 }
@@ -297,7 +297,7 @@ export default function DashboardShell({
         position="relative"
         contentWidth="full"
         toolbar={<Toolbar>{moreActions()}</Toolbar>}
-        isLoading={isLoading || isSurveyLoading}
+        isLoading={isLoading && isServiceLoading && isScheduleLoading}
       >
         {children}
       </Page>

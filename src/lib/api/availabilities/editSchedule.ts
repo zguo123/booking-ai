@@ -15,7 +15,7 @@ import {
 } from "@internationalized/date";
 import { useStepFormContext } from "@saas-ui/react";
 import { StatusCodes } from "http-status-codes";
-import { getMonthAsName } from "@/lib/dateHelpers";
+import { formatMonthYear, getMonthAsName } from "@/lib/dateHelpers";
 
 const validateDate = (
   workingHourInfo: Pick<WorkingHours, "from" | "to" | "isClosed">,
@@ -46,7 +46,8 @@ const validateDate = (
 
 export default async (
   availabilityData: AvailabilityRequestBody,
-  userId: string
+  userId: string,
+  scheduleId: string
 ): Promise<AvailabilityAPIResponse> => {
   try {
     // check for valid month and see if the month is already taken
@@ -55,10 +56,25 @@ export default async (
 
     // retrieve the availability data
     const availability = await AvailabilityModel.findOne({
+      user: userId,
+      _id: scheduleId,
+    });
+
+    // check for availability from the user and month
+    const availabilityExists = await AvailabilityModel.exists({
       monthYear: availabilityData.monthYear,
       user: userId,
     });
 
+    if (!availability) {
+      return {
+        success: false,
+        status: StatusCodes.NOT_FOUND,
+        error: {
+          message: `Availability with that month and year does not exist`,
+        },
+      };
+    }
 
     let errors: {
       [key in keyof AvailabilityRequestBody]: string | undefined;
@@ -73,6 +89,12 @@ export default async (
       sunday: undefined,
       includeHolidays: undefined,
     };
+
+    if (availabilityExists) {
+      errors.monthYear = `Availability Schedule for ${formatMonthYear(
+        availabilityData.monthYear
+      )} already exists`;
+    }
 
     // check all the dates
     Object.entries(availabilityData).forEach(([key, value]) => {
@@ -98,23 +120,24 @@ export default async (
       givenDate.month !== currentDate.month
     ) {
       errors.monthYear = "The given month is in the past";
-    } else if (availability) {
-      errors.monthYear = `You cannot make a new availability schedule for the month of ${
-        getMonthAsName(`${availabilityData.monthYear}-01`) || ""
-      }, ${
-        availabilityData.monthYear.split("-")[0]
-      } because you already have one`;
     }
 
     const doesHaveErrors = Object.values(errors).some((error) => !!error);
 
     if (!doesHaveErrors) {
-      // create
-      await AvailabilityModel.create({
-        ...availabilityData,
-        user: userId,
-        monthYear: `${availabilityData.monthYear}`,
-      });
+      // update the availability
+      await AvailabilityModel.findOneAndUpdate(
+        { user: userId, _id: scheduleId },
+        {
+          $set: {
+            ...availabilityData,
+          },
+        },
+        {
+          new: true,
+          upsert: true,
+        }
+      );
     }
 
     return {

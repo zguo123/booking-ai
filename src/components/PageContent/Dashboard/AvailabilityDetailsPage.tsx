@@ -1,23 +1,36 @@
 "use client";
 import DashboardShell from "@/components/Base/DashboardShell";
-import AddAvailabilityForm from "@/components/DashboardComponents/AddAvailabilityForm";
 import useAuthInfo from "@/hooks/useAuthInfo";
-import { formatMonthYear, getMonthNameFromNumber } from "@/lib/dateHelpers";
 import { days } from "@/lib/consts/days";
-import { useCreateAvailabilityScheduleMutation } from "@/redux/services/availability";
+import { formatMonthYear, getMonthNameFromNumber } from "@/lib/dateHelpers";
 import {
+  useCreateAvailabilityScheduleMutation,
+  useEditAvailabilityScheduleMutation,
+} from "@/redux/services/availability";
+import {
+  AvailabilityDate,
+  AvailabilityItems,
   AvailabilityRequestBody,
   WorkingHours,
-  AvailabilityDate,
 } from "@/typings/availability";
 import { Container } from "@chakra-ui/react";
 import { parseDate } from "@internationalized/date";
 import { Form, SubmitButton, UseFormReturn, useSnackbar } from "@saas-ui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { useRetrieveOneScheduleQuery } from "@/redux/services/availability";
+import UpdateAvailabilityDetails from "@/components/DashboardComponents/UpdateAvailabilityDetails";
 import { sanitizeSchedule } from "@/lib/scheduleHelpers";
 
-export default function NewAvailabilityPage() {
+export type AvailabilityDetailsPageProps = {
+  scheduleId: string;
+  scheduleData: AvailabilityItems;
+};
+
+export default function AvailabilityDetailsPage({
+  scheduleId,
+  scheduleData,
+}: AvailabilityDetailsPageProps) {
   const formRef = React.useRef<UseFormReturn>(null);
 
   const { user } = useAuthInfo();
@@ -27,28 +40,28 @@ export default function NewAvailabilityPage() {
   const router = useRouter();
 
   const [
-    addAvailability,
+    editAvailability,
     { isLoading: isAvailabilityLoading },
-  ] = useCreateAvailabilityScheduleMutation();
+  ] = useEditAvailabilityScheduleMutation();
 
   const onSubmit = async (data: AvailabilityRequestBody) => {
     try {
+
       const sanitizedDate = sanitizeSchedule(data);
 
-      const res = await addAvailability({
+      const res = await editAvailability({
         ...sanitizedDate,
         userId: user?._id as string,
+        scheduleId,
       }).unwrap();
 
       if (res.success) {
         snackbar.success({
-          title: "Schedule added",
-          description: `Your schedule has been added for the month of ${formatMonthYear(
+          title: "Schedule Edited",
+          description: `Your schedule has been Edited for the month of ${formatMonthYear(
             sanitizedDate?.monthYear
-          )}
-          `,
+          )}`,
           duration: 5000,
-
           isClosable: true,
         });
 
@@ -83,23 +96,26 @@ export default function NewAvailabilityPage() {
       onSubmit={(values) => {
         onSubmit(values as AvailabilityRequestBody);
       }}
+      defaultValues={{
+        ...scheduleData,
+      }}
     >
       <DashboardShell
         additionalActions={{
-          pathname: "/dashboard/availability/new",
+          pathname: `/dashboard/availability/${scheduleId}`,
           items: (
             <SubmitButton
               isLoading={isAvailabilityLoading}
               disableIfUntouched
               disableIfInvalid
             >
-              Add Schedule
+              Edit Schedule
             </SubmitButton>
           ),
         }}
       >
         <Container maxW="container.xl" py={5}>
-          <AddAvailabilityForm />
+          <UpdateAvailabilityDetails />
         </Container>
       </DashboardShell>
     </Form>

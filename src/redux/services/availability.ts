@@ -46,6 +46,25 @@ export const availabilityApi = createApi({
       invalidatesTags: ["Availability", "Availabilities"],
     }),
 
+    editAvailabilitySchedule: builder.mutation<
+      AvailabilityAPIResponse,
+      AvailabilityRequestBody & { userId: string; scheduleId: string }
+    >({
+      query: ({ userId, scheduleId, ...availabilityData }) => ({
+        url: `/options/${scheduleId}/edit?userId=${userId}`,
+        method: "PATCH",
+        body: {
+          availabilityData: { ...availabilityData },
+        },
+      }),
+
+      invalidatesTags: ["Availability", "Availabilities"],
+
+      transformErrorResponse: (error: any): ErrorType["message"] => {
+        return error?.data?.error?.message;
+      },
+    }),
+
     createAvailabilitySchedule: builder.mutation<
       AvailabilityAPIResponse,
       AvailabilityRequestBody & { userId: string }
@@ -72,4 +91,5 @@ export const {
   useRetrieveOneScheduleQuery,
   useLazyRetrieveOneScheduleQuery,
   useDeleteScheduleMutation,
+  useEditAvailabilityScheduleMutation,
 } = availabilityApi;
