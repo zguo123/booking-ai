@@ -12,8 +12,16 @@ const editOneServiceHandler: GenericServiceHandler = async (req, res) => {
   } = req;
 
   await dbConnect();
-  await isAuthenticated(req?.cookies?.token as string);
 
+  if (!isAuthenticated(req?.cookies?.token as string)) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      success: false,
+      status: StatusCodes.UNAUTHORIZED,
+      error: {
+        message: "User not authenticated",
+      },
+    });
+  }
   switch (method) {
     case "PATCH":
       const { status, success, error } = await editService(

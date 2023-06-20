@@ -11,8 +11,16 @@ const retrieveOneService: GenericServiceHandler = async (req, res) => {
   } = req;
 
   await dbConnect();
-  await isAuthenticated(req?.cookies?.token as string);
 
+  if (!isAuthenticated(req?.cookies?.token as string)) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      success: false,
+      status: StatusCodes.UNAUTHORIZED,
+      error: {
+        message: "User not authenticated",
+      },
+    });
+  }
   switch (method) {
     case "GET":
       const { status, success, ...rest } = await getServices(
@@ -30,7 +38,7 @@ const retrieveOneService: GenericServiceHandler = async (req, res) => {
       return res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
         success: false,
         status: StatusCodes.METHOD_NOT_ALLOWED,
-    error: {
+        error: {
           message: `${method} not allowed`,
         },
       });

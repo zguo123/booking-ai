@@ -1,3 +1,5 @@
+import { cookies } from "next/headers";
+import { isAuthenticated } from "@/lib/api/auth/authentication";
 import addNew from "@/lib/api/availabilities/addNew";
 import dbConnect from "@/lib/dbConnect";
 import { GenericAvailabilityHandler } from "@/typings/availability";
@@ -13,6 +15,16 @@ const createAvailabilityHandler: GenericAvailabilityHandler = async (
   } = req;
 
   await dbConnect();
+
+  if (!isAuthenticated(req?.cookies?.token as string)) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      success: false,
+      status: StatusCodes.UNAUTHORIZED,
+      error: {
+        message: "User not authenticated",
+      },
+    });
+  }
 
   switch (method) {
     case "POST":

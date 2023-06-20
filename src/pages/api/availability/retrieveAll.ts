@@ -1,3 +1,4 @@
+import { isAuthenticated } from "@/lib/api/auth/authentication";
 import retrieveAllSchedules from "@/lib/api/availabilities/retrieveAllSchedules";
 import dbConnect from "@/lib/dbConnect";
 import { GenericAvailabilityHandler } from "@/typings/availability";
@@ -13,6 +14,16 @@ const retrieveAllSchedulesHandler: GenericAvailabilityHandler = async (
   } = req;
 
   await dbConnect();
+
+  if (!isAuthenticated(req?.cookies?.token)) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      success: false,
+      status: StatusCodes.UNAUTHORIZED,
+      error: {
+        message: "User not authenticated",
+      },
+    });
+  }
 
   switch (method) {
     case "GET":
