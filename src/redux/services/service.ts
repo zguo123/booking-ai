@@ -8,7 +8,7 @@ export const servicesApi = createApi({
     baseUrl: "/api/services",
   }),
 
-  tagTypes: ["Services"],
+  tagTypes: ["Services", "Service"],
 
   endpoints: (builder) => ({
     retrieveServices: builder.query<ServiceAPIResponse, string>({
@@ -18,6 +18,39 @@ export const servicesApi = createApi({
       }),
 
       providesTags: ["Services"],
+    }),
+
+    retrieveOneService: builder.query<
+      ServiceAPIResponse,
+      {
+        serviceId: string;
+        userId: string;
+      }
+    >({
+      query: ({ serviceId, userId }) => ({
+        url: `/options/${serviceId}/retrieve?userId=${userId}`,
+        method: "GET",
+      }),
+
+      providesTags: ["Service"],
+    }),
+
+    editOneService: builder.mutation<
+      ServiceAPIResponse,
+      {
+        serviceId: string;
+        userId: string;
+      } & ServiceRequestBody
+    >({
+      query: ({ serviceId, userId, ...serviceData }) => ({
+        url: `/options/${serviceId}/edit?userId=${userId}`,
+        method: "PATCH",
+        body: {
+          serviceData: { ...serviceData },
+        },
+      }),
+
+      invalidatesTags: ["Service"],
     }),
 
     deleteService: builder.mutation<ServiceAPIResponse, string>({
@@ -53,4 +86,7 @@ export const {
   useRetrieveServicesQuery,
   useCreateServiceMutation,
   useDeleteServiceMutation,
+  useRetrieveOneServiceQuery,
+  useLazyRetrieveOneServiceQuery,
+  useEditOneServiceMutation,
 } = servicesApi;

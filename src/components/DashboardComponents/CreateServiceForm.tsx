@@ -22,7 +22,7 @@ export default function CreateServiceForm() {
 
   const { user } = useAuthInfo();
 
-  const [createService, { error, isLoading }] = useCreateServiceMutation();
+  const [createService, {  isLoading }] = useCreateServiceMutation();
 
   const onSubmit = async (data: ServiceRequestBody) => {
     try {

@@ -12,11 +12,15 @@ import { MenuItem, OverflowMenu, useSnackbar } from "@saas-ui/react";
 import { useCallback, useState } from "react";
 import { BulkActions } from "@saas-ui/pro";
 import { Button } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardServicesPage() {
   const snackbar = useSnackbar();
 
   const { user } = useAuthInfo();
+
+  const router = useRouter();
 
   const { data: services } = useRetrieveServicesQuery(user?._id as string);
 
@@ -44,8 +48,19 @@ export default function DashboardServicesPage() {
   return (
     <>
       <DataGrid
-        isHoverable
         isSortable
+        isHoverable
+        getRowId={(row) => {
+          return String(row?._id);
+        }}
+        onRowClick={(row) => {
+          router.push(`/dashboard/services/${row?.id}`);
+        }}
+        sx={{
+          "& tbody tr": {
+            cursor: "pointer",
+          },
+        }}
         onSelectedRowsChange={onSelectedServicesChange}
         columns={[
           {
@@ -69,17 +84,19 @@ export default function DashboardServicesPage() {
             size: 50,
             cell: (cell) => {
               return (
-                <OverflowMenu size="xs">
-                  <MenuItem
-                    onClick={() => {
-                      const { _id, name } = cell?.row?.original;
+                <Box onClick={(e) => e.stopPropagation()}>
+                  <OverflowMenu size="xs">
+                    <MenuItem
+                      onClick={() => {
+                        const { _id, name } = cell?.row?.original;
 
-                      deleteServices(_id as string, name);
-                    }}
-                  >
-                    Delete
-                  </MenuItem>
-                </OverflowMenu>
+                        deleteServices(_id as string, name);
+                      }}
+                    >
+                      Delete
+                    </MenuItem>
+                  </OverflowMenu>
+                </Box>
               );
             },
           },

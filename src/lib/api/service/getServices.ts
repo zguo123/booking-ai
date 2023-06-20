@@ -1,13 +1,17 @@
 import logger from "@/lib/logger";
 import ServiceModel from "@/models/ServiceModel";
-import { ServiceAPIResponse, ServiceRequestBody } from "@/typings/service";
+import { ServiceAPIResponse } from "@/typings/service";
 import { StatusCodes } from "http-status-codes";
-import validator from "validator";
 
-export default async (userId: string): Promise<ServiceAPIResponse> => {
+export default async (
+  userId: string,
+  serviceId?: string
+): Promise<ServiceAPIResponse> => {
   try {
     return {
-      service: await ServiceModel.find({ user: userId }).lean(),
+      service: !serviceId
+        ? await ServiceModel.find({ user: userId }).lean()
+        : await ServiceModel.findOne({ user: userId, _id: serviceId }).lean(),
       success: true,
       status: StatusCodes.OK,
     };

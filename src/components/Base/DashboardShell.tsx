@@ -10,7 +10,9 @@ import {
   MenuItem,
   MenuList,
   Skeleton,
+  SkeletonText,
   Text,
+  useQuery,
 } from "@chakra-ui/react";
 import { Page, Toolbar } from "@saas-ui/pro";
 import { AppShell, Persona } from "@saas-ui/react";
@@ -20,16 +22,26 @@ import {
   SidebarSection,
   SidebarToggleButton,
 } from "@saas-ui/sidebar";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 
 import useAuthInfo from "@/hooks/useAuthInfo";
 import { useFlags } from "flagsmith/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { BsClock, BsFillGridFill, BsGear } from "react-icons/bs";
 import { FiHome, FiLogOut } from "react-icons/fi";
 import FeatureFlag from "./FeatureFlag";
 import CreateServiceForm from "../DashboardComponents/CreateServiceForm";
+import {
+  useLazyRetrieveOneServiceQuery,
+  useRetrieveOneServiceQuery,
+} from "@/redux/services/service";
+import { ServiceItems } from "@/typings/service";
 
 export default function DashboardShell({
   children,
@@ -39,9 +51,30 @@ export default function DashboardShell({
   // auth info
   const { user, isLoading, signOut } = useAuthInfo();
 
-  const pathname = usePathname();
+  // params
+  const params = useParams();
 
-  const flags = useFlags(["add_service"]); // only causes re-render if specified flag values / traits change
+  // service info
+  const [
+    retrieveService,
+    { data: serviceData, isLoading: isSurveyLoading },
+  ] = useLazyRetrieveOneServiceQuery({
+    refetchOnReconnect: true,
+  });
+
+  useEffect(() => {
+    if (params?.serviceId && user?._id) {
+      retrieveService(
+        {
+          serviceId: params?.serviceId as string,
+          userId: user?._id as string,
+        },
+        true
+      ).unwrap();
+    }
+  }, [params?.serviceId, user]);
+
+  const pathname = usePathname();
 
   const renderTitle = () => {
     switch (pathname) {
@@ -49,14 +82,29 @@ export default function DashboardShell({
         return "Your Appointments";
       case "/dashboard/services":
         return "Your Services";
-      case "/dashboard/services/create":
+      case `/dashboard/services/${params?.serviceId}`:
         return (
           <Breadcrumb>
             <BreadcrumbItem>
               <Link href="/dashboard/services">Services</Link>
             </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Text>Details</Text>
+            </BreadcrumbItem>
             <BreadcrumbItem color="muted">
-              <Text>Create</Text>
+              {" "}
+              <SkeletonText
+                width="20"
+                isLoaded={
+                  !!(serviceData?.service as ServiceItems)?.name &&
+                  !isSurveyLoading &&
+                  (serviceData?.service as ServiceItems)?._id ===
+                    params?.serviceId
+                }
+                noOfLines={1}
+              >
+                <Text>{(serviceData?.service as ServiceItems)?.name}</Text>{" "}
+              </SkeletonText>
             </BreadcrumbItem>
           </Breadcrumb>
         );
@@ -167,7 +215,7 @@ export default function DashboardShell({
         position="relative"
         contentWidth="full"
         toolbar={<Toolbar>{moreActions()}</Toolbar>}
-        isLoading={isLoading}
+        isLoading={isLoading || isSurveyLoading}
       >
         {children}
       </Page>
