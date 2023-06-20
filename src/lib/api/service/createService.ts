@@ -10,7 +10,9 @@ export default async (
 ): Promise<ServiceAPIResponse> => {
   try {
     // find service name
-    const service = await ServiceModel.findOne({ name: serviceData.name });
+    const service = await ServiceModel.findOne({
+      name: serviceData.name.trim(),
+    });
 
     const errors: { [key in keyof ServiceRequestBody]: string | undefined } = {
       name: undefined,

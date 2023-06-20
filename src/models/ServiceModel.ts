@@ -5,6 +5,7 @@ const serviceSchema = new Schema<ServiceItems>({
   name: {
     type: String,
     required: [true, "Service name is required"],
+    unique: true,
   },
   description: {
     type: String,

@@ -164,8 +164,10 @@ export default function DashboardShell({
     >
       <Page
         title={renderTitle()}
+        position="relative"
         contentWidth="full"
         toolbar={<Toolbar>{moreActions()}</Toolbar>}
+        isLoading={isLoading}
       >
         {children}
       </Page>

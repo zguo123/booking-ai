@@ -1,3 +1,4 @@
+import { isAuthenticated } from "@/lib/api/auth/authentication";
 import createService from "@/lib/api/service/createService";
 import getServices from "@/lib/api/service/getServices";
 import dbConnect from "@/lib/dbConnect";
@@ -11,6 +12,7 @@ const retrieveAllServices: GenericServiceHandler = async (req, res) => {
   } = req;
 
   await dbConnect();
+  await isAuthenticated(req?.cookies?.token as string);
 
   switch (method) {
     case "GET":

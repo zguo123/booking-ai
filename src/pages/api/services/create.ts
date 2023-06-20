@@ -1,3 +1,4 @@
+import { isAuthenticated } from "@/lib/api/auth/authentication";
 import createService from "@/lib/api/service/createService";
 import dbConnect from "@/lib/dbConnect";
 import { GenericServiceHandler, ServiceRequestBody } from "@/typings/service";
@@ -9,7 +10,9 @@ const createServiceHandler: GenericServiceHandler = async (req, res) => {
     body: { serviceData, userId },
   } = req;
 
-  await dbConnect(); 
+  await dbConnect();
+
+  await isAuthenticated(req?.cookies?.token as string);
 
   switch (method) {
     case "POST":

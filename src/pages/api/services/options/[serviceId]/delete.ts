@@ -1,3 +1,4 @@
+import { isAuthenticated } from "@/lib/api/auth/authentication";
 import deleteService from "@/lib/api/service/deleteService";
 import dbConnect from "@/lib/dbConnect";
 import { GenericServiceHandler } from "@/typings/service";
@@ -10,9 +11,10 @@ const deleteServiceHandler: GenericServiceHandler = async (req, res) => {
   } = req;
 
   await dbConnect();
+  await isAuthenticated(req?.cookies?.token as string);
 
   switch (method) {
-    case "POST":
+    case "DELETE":
       const { status, success, error } = await deleteService(
         serviceId as string
       );
