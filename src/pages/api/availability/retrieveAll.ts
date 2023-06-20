@@ -15,7 +15,7 @@ const retrieveAllSchedulesHandler: GenericAvailabilityHandler = async (
   await dbConnect();
 
   switch (method) {
-    case "POST":
+    case "GET":
       const { status, success, ...rest } = await retrieveAllSchedules(userId);
 
       return res.status(status).json({

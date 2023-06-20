@@ -46,7 +46,7 @@ export type WorkingHours = {
 };
 
 export type AvailabilityAPIResponse = APIRet & {
-  availability?: AvailabilityItems | AvailabilityItems[] | null;
+  schedules?: AvailabilityItems | AvailabilityItems[] | null;
 };
 
 export type GenericAvailabilityRequest = Override<

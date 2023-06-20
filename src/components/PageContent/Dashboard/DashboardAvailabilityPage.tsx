@@ -1,38 +1,59 @@
 "use client";
 
-import {
-  appointmentData,
-  appointmentDataColumns,
-} from "@/lib/consts/appointments";
-import { formatPrice } from "@/lib/helpers/appointment";
+import useAuthInfo from "@/hooks/useAuthInfo";
+import { getMonthNameFromNumber } from "@/lib/api/availabilities/helpers";
+import { days } from "@/lib/consts/days";
+import { useRetrieveAllSchedulesQuery } from "@/redux/services/availability";
+import { AvailabilityItems, WorkingHours } from "@/typings/availability";
 import { SettingsIcon } from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
+import { parseDate } from "@internationalized/date";
 import { DataGrid, DataGridPagination } from "@saas-ui/pro";
 
 export default function DashboardAvailabilityPage() {
   // convert the date to a string
+  const { user } = useAuthInfo();
+
+  const { data: scheduleData } = useRetrieveAllSchedulesQuery(
+    user?._id as string
+  );
 
   return (
     <DataGrid
       isHoverable
-      isSelectable
       isSortable
       columns={[
-        ...appointmentDataColumns,
-        {
-          id: "actions",
-          header: "More Actions",
-
-          cell: () => <Button leftIcon={<SettingsIcon />}>Manage</Button>,
-        },
+        { id: "month", header: "Schedule Month" },
+        { id: "openedDays", header: "Operating Days" },
       ]}
-      data={appointmentData.map((appointment) => {
-        return {
-          ...appointment,
-          appointmentDate: appointment.appointmentDate.toDateString(),
-          totalPrice: formatPrice(appointment.totalPrice),
-        };
-      })}
+      data={((scheduleData?.schedules as AvailabilityItems[]) || [])?.map(
+        (schedule) => {
+          const currMonthYear = parseDate(`${schedule?.monthYear}-01`);
+
+          const openedDays = Object.keys(schedule || {})
+            .filter((key) => {
+              if (days.includes(key)) {
+                const workingHourInfo = schedule?.[
+                  key as keyof AvailabilityItems
+                ] as WorkingHours;
+
+                return !workingHourInfo?.isClosed;
+              }
+            })
+            .map((key) => `${key.slice(0, 3).toUpperCase()}`)
+            .join(", ");
+
+          console.log();
+
+          return {
+            month: `${getMonthNameFromNumber(currMonthYear.month)}, ${
+              currMonthYear.year
+            }`,
+            openedDays,
+            ...schedule,
+          };
+        }
+      )}
     >
       <DataGridPagination />
     </DataGrid>
