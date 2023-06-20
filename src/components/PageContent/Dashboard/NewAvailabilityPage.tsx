@@ -66,7 +66,7 @@ export default function NewAvailabilityPage() {
           isClosable: true,
         });
 
-        router.push("/dashboard/availability");
+        router.replace("/dashboard/availability");
       }
     } catch (error) {
       const err = error as { [key: string]: string };
