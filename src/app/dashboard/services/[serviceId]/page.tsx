@@ -2,6 +2,7 @@ import React from "react";
 import { Metadata, ResolvingMetadata } from "next";
 import dbConnect from "@/lib/dbConnect";
 import ServiceModel from "@/models/ServiceModel";
+import ViewServicePage from "@/components/DashboardComponents/ViewServicePage";
 
 type ServiceDetailPageProps = {
   params: { serviceId: string };
@@ -27,5 +28,5 @@ export async function generateMetadata({
 }
 
 export default function ServiceDetailPage({ params }: ServiceDetailPageProps) {
-  return <div>page</div>;
+  return <ViewServicePage serviceId={params.serviceId} />;
 }

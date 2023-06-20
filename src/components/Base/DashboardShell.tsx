@@ -12,9 +12,8 @@ import {
   Skeleton,
   SkeletonText,
   Text,
-  useQuery,
 } from "@chakra-ui/react";
-import { Page, Toolbar } from "@saas-ui/pro";
+import { Page, PageSidebar, PageSidebarHeader, Toolbar } from "@saas-ui/pro";
 import { AppShell, Persona } from "@saas-ui/react";
 import {
   NavItem,
@@ -22,26 +21,16 @@ import {
   SidebarSection,
   SidebarToggleButton,
 } from "@saas-ui/sidebar";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 
 import useAuthInfo from "@/hooks/useAuthInfo";
-import { useFlags } from "flagsmith/react";
+import { useLazyRetrieveOneServiceQuery } from "@/redux/services/service";
+import { ServiceItems } from "@/typings/service";
 import Link from "next/link";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { BsClock, BsFillGridFill, BsGear } from "react-icons/bs";
 import { FiHome, FiLogOut } from "react-icons/fi";
-import FeatureFlag from "./FeatureFlag";
 import CreateServiceForm from "../DashboardComponents/CreateServiceForm";
-import {
-  useLazyRetrieveOneServiceQuery,
-  useRetrieveOneServiceQuery,
-} from "@/redux/services/service";
-import { ServiceItems } from "@/typings/service";
 
 export default function DashboardShell({
   children,
