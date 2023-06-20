@@ -13,7 +13,7 @@ export type AvailabilityItems = {
   sunday: WorkingHours;
   includeHolidays: boolean;
   user: string;
-  month: string;
+  monthYear: string;
 };
 
 export type AvailabilityDate =
@@ -35,7 +35,7 @@ export type AvailabilityRequestBody = Pick<
   | "saturday"
   | "sunday"
   | "includeHolidays"
-  | "month"
+  | "monthYear"
 >;
 
 export type WorkingHours = {

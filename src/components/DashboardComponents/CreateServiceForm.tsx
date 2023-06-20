@@ -32,10 +32,10 @@ export default function CreateServiceForm() {
       }).unwrap();
 
       if (res.success) {
-        snackbar({
+        snackbar.success({
           title: ` ${data?.name} created`,
           description: "Your service has been created",
-          status: "success",
+          
           duration: 5000,
           isClosable: true,
         });

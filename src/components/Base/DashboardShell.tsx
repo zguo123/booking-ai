@@ -13,7 +13,7 @@ import {
   SkeletonText,
   Text,
 } from "@chakra-ui/react";
-import { Page, Toolbar } from "@saas-ui/pro";
+import { Page, Toolbar, ToolbarProps } from "@saas-ui/pro";
 import { AppShell, Persona } from "@saas-ui/react";
 import {
   NavItem,
@@ -34,11 +34,18 @@ import AddAvailabilityForm from "../DashboardComponents/AddAvailabilityForm";
 import CreateServiceForm from "../DashboardComponents/CreateServiceForm";
 import FeatureFlag from "./FeatureFlag";
 
+export type DashboardShellProps = {
+  children: React.ReactNode;
+  additionalActions?: {
+    pathname: string;
+    items: React.ReactNode;
+  };
+};
+
 export default function DashboardShell({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+  additionalActions,
+}: DashboardShellProps) {
   // auth info
   const { user, isLoading, signOut } = useAuthInfo();
 
@@ -107,7 +114,7 @@ export default function DashboardShell({
         return (
           <Breadcrumb>
             <BreadcrumbItem>
-              <Link href="/dashboard/services">Availability</Link>
+              <Link href="/dashboard/availability">Availability</Link>
             </BreadcrumbItem>
 
             <BreadcrumbItem color="muted" isCurrentPage>
@@ -140,6 +147,8 @@ export default function DashboardShell({
             </Button>
           </FeatureFlag>
         );
+      case additionalActions?.pathname:
+        return additionalActions?.items;
     }
   };
 

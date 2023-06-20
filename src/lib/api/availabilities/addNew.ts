@@ -13,26 +13,35 @@ import {
   parseTime,
   today,
 } from "@internationalized/date";
+import { useStepFormContext } from "@saas-ui/react";
 import { StatusCodes } from "http-status-codes";
+import { getMonthAsName } from "./helpers";
 
 const validateDate = (
   workingHourInfo: Pick<WorkingHours, "from" | "to" | "isClosed">,
   errors: { [key in keyof AvailabilityRequestBody]: string | undefined },
   date: AvailabilityDate
 ) => {
-  const parsedTimes = {
-    from: parseTime(workingHourInfo.from),
-    to: parseTime(workingHourInfo.to),
-  };
   // only conduct validation if the date is not closed
   if (!workingHourInfo.isClosed) {
+    const parsedTimes = {
+      from: parseTime(workingHourInfo.from),
+      to: parseTime(workingHourInfo.to),
+    };
+
+    logger.child({ parsedTimes }).info("[validateDate] parsedTimes");
+    logger.info(
+      `[validateDate] comparison ${parsedTimes.to.compare(parsedTimes.from)}`
+    );
     // from time must be before to time
-    if (parsedTimes.from.compare(parsedTimes.to) < 0) {
-      errors[date] = `The from time must be before the to time on ${date}`;
+    if (parsedTimes.to.compare(parsedTimes.from) < 0) {
+      errors[
+        date
+      ] = `This range is invalid: ${workingHourInfo.from} - ${workingHourInfo.to}`;
     }
   }
 
-  errors[date] = undefined;
+  return errors;
 };
 
 export default async (
@@ -42,18 +51,18 @@ export default async (
   try {
     // check for valid month and see if the month is already taken
     const currentDate = today(getLocalTimeZone());
-    const givenDate = parseDate(`${availabilityData.month}-01`);
+    const givenDate = parseDate(`${availabilityData.monthYear}-01`);
 
     // retrieve the availability data
     const availability = await AvailabilityModel.findOne({
-      month: availabilityData.month,
+      monthYear: availabilityData.monthYear,
       user: userId,
     });
 
-    const errors: {
+    let errors: {
       [key in keyof AvailabilityRequestBody]: string | undefined;
     } = {
-      month: undefined,
+      monthYear: undefined,
       monday: undefined,
       tuesday: undefined,
       wednesday: undefined,
@@ -70,18 +79,30 @@ export default async (
         return;
       }
 
-      validateDate(
+      const dayErrors = validateDate(
         value as Pick<WorkingHours, "from" | "to" | "isClosed">,
         errors,
         key as AvailabilityDate
       );
+
+      errors = {
+        ...errors,
+        ...dayErrors,
+      };
     });
 
     // make sure the given date is not in the past
-    if (givenDate.compare(currentDate) < 0) {
-      errors.month = "The given month is in the past";
+    if (
+      givenDate.compare(currentDate) < 0 &&
+      givenDate.month !== currentDate.month
+    ) {
+      errors.monthYear = "The given month is in the past";
     } else if (availability) {
-      errors.month = `You cannot make a new availability schedule for the month of ${availabilityData.month}`;
+      errors.monthYear = `You cannot make a new availability schedule for the month of ${
+        getMonthAsName(`${availabilityData.monthYear}-01`) || ""
+      }, ${
+        availabilityData.monthYear.split("-")[0]
+      } because you already have one`;
     }
 
     const doesHaveErrors = Object.values(errors).some((error) => !!error);
@@ -91,7 +112,7 @@ export default async (
       await AvailabilityModel.create({
         ...availabilityData,
         user: userId,
-        month: `${availabilityData.month.split("-")[0]}}`,
+        monthYear: `${availabilityData.monthYear}`,
       });
     }
 

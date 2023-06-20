@@ -1,4 +1,3 @@
-import addNew from "@/lib/api/availabilities/addNew";
 import retrieveAllSchedules from "@/lib/api/availabilities/retrieveAllSchedules";
 import dbConnect from "@/lib/dbConnect";
 import { GenericAvailabilityHandler } from "@/typings/availability";
@@ -11,7 +10,6 @@ const retrieveAllSchedulesHandler: GenericAvailabilityHandler = async (
   const {
     method,
     query: { userId },
-    body: { availabilityData },
   } = req;
 
   await dbConnect();

@@ -34,7 +34,7 @@ export const availabilitySchema = new Schema<AvailabilityItems>({
     type: String,
     required: [true, "User is required"],
   },
-  month: {
+  monthYear: {
     type: String,
     required: [true, "Month is required"],
     unique: true,

@@ -1,7 +1,8 @@
-import { AvailabilityRequestBody } from "@/typings/availability";
-import { AvailabilityAPIResponse } from "@/typings/availability";
+import {
+  AvailabilityAPIResponse,
+  AvailabilityRequestBody,
+} from "@/typings/availability";
 import { ErrorType } from "@/typings/global";
-import { ServiceAPIResponse, ServiceRequestBody } from "@/typings/service";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 export const availabilityApi = createApi({
@@ -15,7 +16,7 @@ export const availabilityApi = createApi({
   endpoints: (builder) => ({
     retrieveAllSchedules: builder.query<AvailabilityAPIResponse, string>({
       query: (userId) => ({
-        url: `/retrieve?userId=${userId}`,
+        url: `/retrieveAll?userId=${userId}`,
         method: "GET",
       }),
 
@@ -35,6 +36,9 @@ export const availabilityApi = createApi({
         },
       }),
       invalidatesTags: ["Availabilities"],
+      transformErrorResponse: (error: any): ErrorType["message"] => {
+        return error?.data?.error?.message;
+      },
     }),
   }),
 });

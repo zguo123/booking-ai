@@ -1,4 +1,6 @@
-export default function DashboardRootLayout({
+import React from "react";
+
+export default function NewAvailabilityLayout({
   children,
 }: {
   children: React.ReactNode;
