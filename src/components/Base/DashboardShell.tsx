@@ -13,7 +13,7 @@ import {
   SkeletonText,
   Text,
 } from "@chakra-ui/react";
-import { Page, PageSidebar, PageSidebarHeader, Toolbar } from "@saas-ui/pro";
+import { Page, Toolbar } from "@saas-ui/pro";
 import { AppShell, Persona } from "@saas-ui/react";
 import {
   NavItem,
@@ -27,10 +27,12 @@ import useAuthInfo from "@/hooks/useAuthInfo";
 import { useLazyRetrieveOneServiceQuery } from "@/redux/services/service";
 import { ServiceItems } from "@/typings/service";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { BsClock, BsFillGridFill, BsGear } from "react-icons/bs";
 import { FiHome, FiLogOut } from "react-icons/fi";
+import AddAvailabilityForm from "../DashboardComponents/AddAvailabilityForm";
 import CreateServiceForm from "../DashboardComponents/CreateServiceForm";
+import FeatureFlag from "./FeatureFlag";
 
 export default function DashboardShell({
   children,
@@ -39,6 +41,8 @@ export default function DashboardShell({
 }) {
   // auth info
   const { user, isLoading, signOut } = useAuthInfo();
+
+  const router = useRouter();
 
   // params
   const params = useParams();
@@ -80,7 +84,7 @@ export default function DashboardShell({
             <BreadcrumbItem>
               <Text>Details</Text>
             </BreadcrumbItem>
-            <BreadcrumbItem color="muted">
+            <BreadcrumbItem color="muted" isCurrentPage>
               {" "}
               <SkeletonText
                 width="20"
@@ -99,6 +103,20 @@ export default function DashboardShell({
         );
       case "/dashboard/availability":
         return "Your Availability";
+      case "/dashboard/availability/new":
+        return (
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link href="/dashboard/services">Availability</Link>
+            </BreadcrumbItem>
+
+            <BreadcrumbItem color="muted" isCurrentPage>
+              {" "}
+              <Text>New Availability</Text>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        );
+
       case "/dashboard/integrations":
         return "Your Integrations";
     }
@@ -109,10 +127,18 @@ export default function DashboardShell({
       case "/dashboard":
         return <></>;
       case "/dashboard/services":
+        return <CreateServiceForm />;
+      case "/dashboard/availability":
         return (
-          <>
-            <CreateServiceForm />
-          </>
+          <FeatureFlag feature="add_availability">
+            <Button
+              onClick={() => router.push("/dashboard/availability/new")}
+              variant="solid"
+              colorScheme="primary"
+            >
+              Add Availability
+            </Button>
+          </FeatureFlag>
         );
     }
   };
@@ -166,9 +192,9 @@ export default function DashboardShell({
               size="md"
               icon={<BsGear />}
               aria-current={
-                pathname === "/dashboard/services" ? "page" : undefined
+                pathname?.includes("/dashboard/services") ? "page" : undefined
               }
-              isActive={pathname === "/dashboard/services"}
+              isActive={pathname?.includes("/dashboard/services")}
               href="/dashboard/services"
             >
               Services
@@ -177,9 +203,11 @@ export default function DashboardShell({
               size="md"
               icon={<BsClock />}
               aria-current={
-                pathname === "/dashboard/availability" ? "page" : undefined
+                pathname?.includes("/dashboard/availability")
+                  ? "page"
+                  : undefined
               }
-              isActive={pathname === "/dashboard/availability"}
+              isActive={pathname?.includes("/dashboard/availability")}
               href="/dashboard/availability"
             >
               Availability

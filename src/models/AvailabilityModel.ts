@@ -4,11 +4,11 @@ import { Model, Schema, model, models } from "mongoose";
 export const WorkingHoursSchema = new Schema<WorkingHours>({
   from: {
     type: Date,
-    required: [true, "From is required"],
+    required: false,
   },
   to: {
     type: Date,
-    required: [true, "To is required"],
+    required: false,
   },
   isClosed: {
     type: Boolean,
@@ -37,6 +37,7 @@ export const availabilitySchema = new Schema<AvailabilityItems>({
   month: {
     type: String,
     required: [true, "Month is required"],
+    unique: true,
   },
 });
 

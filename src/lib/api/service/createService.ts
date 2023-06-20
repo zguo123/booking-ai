@@ -12,6 +12,7 @@ export default async (
     // find service name
     const service = await ServiceModel.findOne({
       name: serviceData.name.trim(),
+      user: userId,
     });
 
     const errors: { [key in keyof ServiceRequestBody]: string | undefined } = {
@@ -46,7 +47,7 @@ export default async (
 
     // name must be unique
     else if (service) {
-      errors.name = "Service name must be unique";
+      errors.name = `A service with the name ${serviceData.name} already exists on your account.`;
     }
     const doesHaveErrors = Object.values(errors).some((error) => !!error);
 
@@ -60,7 +61,7 @@ export default async (
 
     return {
       success: !doesHaveErrors,
-      status: StatusCodes[doesHaveErrors ? "BAD_REQUEST" : "OK"],
+      status: StatusCodes[doesHaveErrors ? "BAD_REQUEST" : "CREATED"],
       error: {
         message: !doesHaveErrors ? "" : errors,
       },

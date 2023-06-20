@@ -1,4 +1,4 @@
-import { NextApiRequest } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { APIRet, Override } from "./global";
 
 export type ServiceProps = {
@@ -51,10 +51,5 @@ export type GenericServiceRequest = Override<
 
 export type GenericServiceHandler = (
   req: GenericServiceRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ServiceAPIResponse>
 ) => unknown;
-
-export type CreateNewService = (
-  req: ServiceRequestBody,
-  userId: string
-) => Promise<ServiceAPIResponse>;
