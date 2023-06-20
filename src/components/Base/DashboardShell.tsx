@@ -36,6 +36,7 @@ import FeatureFlag from "./FeatureFlag";
 import { useLazyRetrieveOneScheduleQuery } from "@/redux/services/availability";
 import { AvailabilityItems } from "@/typings/availability";
 import { formatMonthYear } from "@/lib/dateHelpers";
+import AppointLink from "../DashboardComponents/AppointLink";
 
 export type DashboardShellProps = {
   children: React.ReactNode;
@@ -188,7 +189,7 @@ export default function DashboardShell({
   const moreActions = () => {
     switch (pathname) {
       case "/dashboard":
-        return <></>;
+        return <AppointLink />;
       case "/dashboard/services":
         return <CreateServiceForm />;
       case "/dashboard/availability":

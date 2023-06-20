@@ -12,8 +12,9 @@ import { FlagsmithProvider } from "flagsmith/react";
 
 // redux
 import { store } from "@/redux/ reduxStore";
+import { ModalsProvider } from "@saas-ui/react";
+import { IState } from "flagsmith/types";
 import { Provider } from "react-redux";
-import { IFlagsmith, IState } from "flagsmith/types";
 
 const inter = Inter({ subsets: ["latin"] });
 const raleway = Raleway({ subsets: ["latin"] });
@@ -39,22 +40,24 @@ export function Providers({
     <>
       <CacheProvider>
         <SaasProvider theme={BaseTheme}>
-          <FlagsmithProvider
-            options={{
-              environmentID: process.env
-                .NEXT_PUBLIC_FEATURE_FLAG_CLIENT_KEY as string,
-              realtime: true,
-            }}
-            flagsmith={flagsmith}
-            serverState={flagSmith}
-          >
-            <Provider store={store}>
-              <ColorModeScript
-                initialColorMode={BaseTheme.config.initialColorMode}
-              />
-              {children}
-            </Provider>
-          </FlagsmithProvider>
+          <ModalsProvider>
+            <FlagsmithProvider
+              options={{
+                environmentID: process.env
+                  .NEXT_PUBLIC_FEATURE_FLAG_CLIENT_KEY as string,
+                realtime: true,
+              }}
+              flagsmith={flagsmith}
+              serverState={flagSmith}
+            >
+              <Provider store={store}>
+                <ColorModeScript
+                  initialColorMode={BaseTheme.config.initialColorMode}
+                />
+                {children}
+              </Provider>
+            </FlagsmithProvider>
+          </ModalsProvider>
         </SaasProvider>
       </CacheProvider>
     </>
