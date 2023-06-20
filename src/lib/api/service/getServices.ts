@@ -8,6 +8,27 @@ export default async (
   serviceId?: string
 ): Promise<ServiceAPIResponse> => {
   try {
+    let service = null;
+
+    if (serviceId) {
+      service = await ServiceModel.findOne({
+        user: userId,
+        _id: serviceId,
+      }).lean();
+    } else {
+      service = await ServiceModel.find({ user: userId }).lean();
+    }
+
+    if (!service) {
+      return {
+        success: false,
+        status: StatusCodes.NOT_FOUND,
+        error: {
+          message: "Service not found",
+        },
+      };
+    }
+
     return {
       service: !serviceId
         ? await ServiceModel.find({ user: userId }).lean()

@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import { isAuthenticated } from "@/lib/api/auth/authentication";
 import addNew from "@/lib/api/availabilities/addNew";
 import dbConnect from "@/lib/dbConnect";

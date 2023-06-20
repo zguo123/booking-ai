@@ -23,6 +23,29 @@ export const availabilityApi = createApi({
       providesTags: ["Availabilities"],
     }),
 
+    retrieveOneSchedule: builder.query<
+      AvailabilityAPIResponse,
+      {
+        scheduleId: string;
+        userId: string;
+      }
+    >({
+      query: ({ scheduleId, userId }) => ({
+        url: `/options/${scheduleId}/retrieve?userId=${userId}`,
+        method: "GET",
+      }),
+
+      providesTags: ["Availability"],
+    }),
+
+    deleteSchedule: builder.mutation<AvailabilityAPIResponse, string>({
+      query: (scheduleId) => ({
+        url: `/options/${scheduleId}/delete`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Availability", "Availabilities"],
+    }),
+
     createAvailabilitySchedule: builder.mutation<
       AvailabilityAPIResponse,
       AvailabilityRequestBody & { userId: string }
@@ -46,4 +69,6 @@ export const availabilityApi = createApi({
 export const {
   useCreateAvailabilityScheduleMutation,
   useRetrieveAllSchedulesQuery,
+  useRetrieveOneScheduleQuery,
+  useDeleteScheduleMutation,
 } = availabilityApi;

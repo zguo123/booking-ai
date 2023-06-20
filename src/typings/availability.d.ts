@@ -53,7 +53,7 @@ export type GenericAvailabilityRequest = Override<
   NextApiRequest,
   {
     query: {
-      availabilityId?: string;
+      scheduleId?: string;
       userId?: string;
     };
     body: {

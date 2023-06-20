@@ -1,21 +1,21 @@
 import { isAuthenticated } from "@/lib/api/auth/authentication";
-import retrieveAllSchedules from "@/lib/api/availabilities/retrieveAllSchedules";
+import retrieveOneSchedule from "@/lib/api/availabilities/retrieveOneSchedule";
 import dbConnect from "@/lib/dbConnect";
 import { GenericAvailabilityHandler } from "@/typings/availability";
 import { StatusCodes } from "http-status-codes";
 
-const retrieveAllSchedulesHandler: GenericAvailabilityHandler = async (
+const retrieveOneScheduleHandler: GenericAvailabilityHandler = async (
   req,
   res
-) => {  
+) => {
   const {
     method,
-    query: { userId },
+    query: { scheduleId, userId },
   } = req;
 
   await dbConnect();
 
-  if (!isAuthenticated(req?.cookies?.token)) {
+  if (!isAuthenticated(req?.cookies?.token as string)) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
       success: false,
       status: StatusCodes.UNAUTHORIZED,
@@ -27,7 +27,10 @@ const retrieveAllSchedulesHandler: GenericAvailabilityHandler = async (
 
   switch (method) {
     case "GET":
-      const { status, success, ...rest } = await retrieveAllSchedules(userId);
+      const { status, success, ...rest } = await retrieveOneSchedule(
+        scheduleId,
+        userId
+      );
 
       return res.status(status).json({
         success,
@@ -46,4 +49,4 @@ const retrieveAllSchedulesHandler: GenericAvailabilityHandler = async (
   }
 };
 
-export default retrieveAllSchedulesHandler;
+export default retrieveOneScheduleHandler;

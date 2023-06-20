@@ -1,21 +1,22 @@
 import { isAuthenticated } from "@/lib/api/auth/authentication";
-import retrieveAllSchedules from "@/lib/api/availabilities/retrieveAllSchedules";
+import deleteOneSchedule from "@/lib/api/availabilities/deleteOneSchedule";
+import retrieveOneSchedule from "@/lib/api/availabilities/retrieveOneSchedule";
 import dbConnect from "@/lib/dbConnect";
 import { GenericAvailabilityHandler } from "@/typings/availability";
 import { StatusCodes } from "http-status-codes";
 
-const retrieveAllSchedulesHandler: GenericAvailabilityHandler = async (
+const deleteOneScheduleHandler: GenericAvailabilityHandler = async (
   req,
   res
-) => {  
+) => {
   const {
     method,
-    query: { userId },
+    query: { scheduleId },
   } = req;
 
   await dbConnect();
 
-  if (!isAuthenticated(req?.cookies?.token)) {
+  if (!isAuthenticated(req?.cookies?.token as string)) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
       success: false,
       status: StatusCodes.UNAUTHORIZED,
@@ -26,8 +27,8 @@ const retrieveAllSchedulesHandler: GenericAvailabilityHandler = async (
   }
 
   switch (method) {
-    case "GET":
-      const { status, success, ...rest } = await retrieveAllSchedules(userId);
+    case "DELETE":
+      const { status, success, ...rest } = await deleteOneSchedule(scheduleId);
 
       return res.status(status).json({
         success,
@@ -46,4 +47,4 @@ const retrieveAllSchedulesHandler: GenericAvailabilityHandler = async (
   }
 };
 
-export default retrieveAllSchedulesHandler;
+export default deleteOneScheduleHandler;

@@ -3,14 +3,19 @@
 import useAuthInfo from "@/hooks/useAuthInfo";
 import { getMonthNameFromNumber } from "@/lib/api/availabilities/helpers";
 import { days } from "@/lib/consts/days";
-import { useRetrieveAllSchedulesQuery } from "@/redux/services/availability";
+import {
+  useDeleteScheduleMutation,
+  useRetrieveAllSchedulesQuery,
+} from "@/redux/services/availability";
 import { AvailabilityItems, WorkingHours } from "@/typings/availability";
-import { SettingsIcon } from "@chakra-ui/icons";
-import { Button } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { parseDate } from "@internationalized/date";
 import { DataGrid, DataGridPagination } from "@saas-ui/pro";
+import { MenuItem, OverflowMenu, useSnackbar } from "@saas-ui/react";
 
 export default function DashboardAvailabilityPage() {
+  const snackbar = useSnackbar();
+
   // convert the date to a string
   const { user } = useAuthInfo();
 
@@ -18,13 +23,53 @@ export default function DashboardAvailabilityPage() {
     user?._id as string
   );
 
+  const [deleteSchedule] = useDeleteScheduleMutation();
+
+  const handleDeleteSchedule = async (scheduleId: string) => {
+    snackbar.promise(deleteSchedule(scheduleId).unwrap(), {
+      loading: "Deleting schedule...",
+      success: "Schedule deleted",
+      error: "Failed to delete schedule",
+    });
+  };
+
   return (
     <DataGrid
       isHoverable
       isSortable
+      sx={{
+        "& tbody tr": {
+          cursor: "pointer",
+        },
+      }}
+      getRowId={(row) => {
+        return String(row?._id);
+      }}
       columns={[
         { id: "month", header: "Schedule Month" },
         { id: "openedDays", header: "Operating Days" },
+        {
+          id: "actions",
+          header: "",
+          size: 50,
+          cell: (cell) => {
+            return (
+              <Box onClick={(e) => e.stopPropagation()}>
+                <OverflowMenu size="xs">
+                  <MenuItem
+                    onClick={() => {
+                      const { _id } = cell?.row?.original;
+
+                      handleDeleteSchedule(_id as string);
+                    }}
+                  >
+                    Delete
+                  </MenuItem>
+                </OverflowMenu>
+              </Box>
+            );
+          },
+        },
       ]}
       data={((scheduleData?.schedules as AvailabilityItems[]) || [])?.map(
         (schedule) => {
@@ -42,8 +87,6 @@ export default function DashboardAvailabilityPage() {
             })
             .map((key) => `${key.slice(0, 3).toUpperCase()}`)
             .join(", ");
-
-          console.log();
 
           return {
             month: `${getMonthNameFromNumber(currMonthYear.month)}, ${
