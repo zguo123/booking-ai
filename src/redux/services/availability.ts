@@ -70,5 +70,6 @@ export const {
   useCreateAvailabilityScheduleMutation,
   useRetrieveAllSchedulesQuery,
   useRetrieveOneScheduleQuery,
+  useLazyRetrieveOneScheduleQuery,
   useDeleteScheduleMutation,
 } = availabilityApi;

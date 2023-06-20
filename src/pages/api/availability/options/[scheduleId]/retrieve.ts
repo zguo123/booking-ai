@@ -28,8 +28,8 @@ const retrieveOneScheduleHandler: GenericAvailabilityHandler = async (
   switch (method) {
     case "GET":
       const { status, success, ...rest } = await retrieveOneSchedule(
-        scheduleId,
-        userId
+        userId,
+        scheduleId
       );
 
       return res.status(status).json({

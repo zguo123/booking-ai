@@ -33,6 +33,9 @@ import { FiHome, FiLogOut } from "react-icons/fi";
 import AddAvailabilityForm from "../DashboardComponents/AddAvailabilityForm";
 import CreateServiceForm from "../DashboardComponents/CreateServiceForm";
 import FeatureFlag from "./FeatureFlag";
+import { useLazyRetrieveOneScheduleQuery } from "@/redux/services/availability";
+import { AvailabilityItems } from "@/typings/availability";
+import { formatMonthYear } from "@/lib/dateHelpers";
 
 export type DashboardShellProps = {
   children: React.ReactNode;
@@ -62,6 +65,14 @@ export default function DashboardShell({
     refetchOnReconnect: true,
   });
 
+  // schedule info
+  const [
+    retrieveSchedule,
+    { data: scheduleData, isLoading: isScheduleLoading },
+  ] = useLazyRetrieveOneScheduleQuery({
+    refetchOnReconnect: true,
+  });
+
   useEffect(() => {
     if (params?.serviceId && user?._id) {
       retrieveService(
@@ -73,6 +84,18 @@ export default function DashboardShell({
       ).unwrap();
     }
   }, [params?.serviceId, user]);
+
+  useEffect(() => {
+    if (params?.scheduleId && user?._id) {
+      retrieveSchedule(
+        {
+          scheduleId: params?.scheduleId as string,
+          userId: user?._id as string,
+        },
+        true
+      ).unwrap();
+    }
+  }, [params?.scheduleId, user]);
 
   const pathname = usePathname();
 
@@ -94,7 +117,7 @@ export default function DashboardShell({
             <BreadcrumbItem color="muted" isCurrentPage>
               {" "}
               <SkeletonText
-                width="20"
+                minW="20"
                 isLoaded={
                   !!(serviceData?.service as ServiceItems)?.name &&
                   !isSurveyLoading &&
@@ -120,6 +143,39 @@ export default function DashboardShell({
             <BreadcrumbItem color="muted" isCurrentPage>
               {" "}
               <Text>New Availability</Text>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        );
+
+      case `/dashboard/availability/${params?.scheduleId}`:
+        return (
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link href="/dashboard/availability">Availability</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Text>Details</Text>
+            </BreadcrumbItem>
+            <BreadcrumbItem color="muted" isCurrentPage>
+              {" "}
+              <SkeletonText
+                minW="20"
+                isLoaded={
+                  !!(scheduleData?.schedules as AvailabilityItems)?.monthYear &&
+                  !isSurveyLoading &&
+                  (scheduleData?.schedules as AvailabilityItems)?._id ===
+                    params?.scheduleId
+                }
+                noOfLines={1}
+              >
+                <Text>
+                  Schedule for{" "}
+                  {formatMonthYear(
+                    (scheduleData?.schedules as AvailabilityItems)
+                      ?.monthYear as string
+                  )}
+                </Text>{" "}
+              </SkeletonText>
             </BreadcrumbItem>
           </Breadcrumb>
         );

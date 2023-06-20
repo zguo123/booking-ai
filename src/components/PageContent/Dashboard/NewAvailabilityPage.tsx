@@ -2,7 +2,7 @@
 import DashboardShell from "@/components/Base/DashboardShell";
 import AddAvailabilityForm from "@/components/DashboardComponents/AddAvailabilityForm";
 import useAuthInfo from "@/hooks/useAuthInfo";
-import { getMonthNameFromNumber } from "@/lib/api/availabilities/helpers";
+import { getMonthNameFromNumber } from "@/lib/dateHelpers";
 import { days } from "@/lib/consts/days";
 import { useCreateAvailabilityScheduleMutation } from "@/redux/services/availability";
 import {

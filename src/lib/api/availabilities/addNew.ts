@@ -15,7 +15,7 @@ import {
 } from "@internationalized/date";
 import { useStepFormContext } from "@saas-ui/react";
 import { StatusCodes } from "http-status-codes";
-import { getMonthAsName } from "./helpers";
+import { getMonthAsName } from "@/lib/dateHelpers";
 
 const validateDate = (
   workingHourInfo: Pick<WorkingHours, "from" | "to" | "isClosed">,

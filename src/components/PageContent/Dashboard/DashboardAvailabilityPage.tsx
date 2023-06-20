@@ -1,7 +1,7 @@
 "use client";
 
 import useAuthInfo from "@/hooks/useAuthInfo";
-import { getMonthNameFromNumber } from "@/lib/api/availabilities/helpers";
+import { getMonthNameFromNumber } from "@/lib/dateHelpers";
 import { days } from "@/lib/consts/days";
 import {
   useDeleteScheduleMutation,
@@ -12,9 +12,12 @@ import { Box } from "@chakra-ui/react";
 import { parseDate } from "@internationalized/date";
 import { DataGrid, DataGridPagination } from "@saas-ui/pro";
 import { MenuItem, OverflowMenu, useSnackbar } from "@saas-ui/react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardAvailabilityPage() {
   const snackbar = useSnackbar();
+
+  const router = useRouter();
 
   // convert the date to a string
   const { user } = useAuthInfo();
@@ -37,13 +40,16 @@ export default function DashboardAvailabilityPage() {
     <DataGrid
       isHoverable
       isSortable
+      getRowId={(row) => {
+        return String(row?._id);
+      }}
+      onRowClick={(row) => {
+        router.push(`/dashboard/availability/${row?.id}`);
+      }}
       sx={{
         "& tbody tr": {
           cursor: "pointer",
         },
-      }}
-      getRowId={(row) => {
-        return String(row?._id);
       }}
       columns={[
         { id: "month", header: "Schedule Month" },

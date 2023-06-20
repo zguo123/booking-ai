@@ -1,8 +1,7 @@
-import React from "react";
-import { Metadata, ResolvingMetadata } from "next";
+import ViewServicePage from "@/components/DashboardComponents/ViewServicePage";
 import dbConnect from "@/lib/dbConnect";
 import ServiceModel from "@/models/ServiceModel";
-import ViewServicePage from "@/components/DashboardComponents/ViewServicePage";
+import { Metadata } from "next";
 
 type ServiceDetailPageProps = {
   params: { serviceId: string };
