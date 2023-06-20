@@ -3,11 +3,11 @@ import { Model, Schema, model, models } from "mongoose";
 
 export const WorkingHoursSchema = new Schema<WorkingHours>({
   from: {
-    type: Date,
+    type: String,
     required: false,
   },
   to: {
-    type: Date,
+    type: String,
     required: false,
   },
   isClosed: {
