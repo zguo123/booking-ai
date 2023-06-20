@@ -33,7 +33,7 @@ export default function CreateServiceForm() {
 
       if (res.success) {
         snackbar({
-          title: `Service created with ${data?.name}`,
+          title: ` ${data?.name} created`,
           description: "Your service has been created",
           status: "success",
           duration: 5000,
