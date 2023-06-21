@@ -16,10 +16,7 @@ import { useRouter } from "next/navigation";
 export default function SearchBookingSitePage() {
   const [
     searchUser,
-    { data: searchData, isLoading: isSearchLoading },
   ] = useLazySearchUserQuery();
-
-  console.log(searchData);
 
   const router = useRouter();
 
@@ -43,7 +40,7 @@ export default function SearchBookingSitePage() {
                 name="username-select"
                 colorScheme="primary"
                 onChange={(value) => {
-                  const result = value as UserSearchResult
+                  const result = value as UserSearchResult;
                   router.push(`/book/${result?.value}`);
                 }}
                 placeholder="Search for a username"

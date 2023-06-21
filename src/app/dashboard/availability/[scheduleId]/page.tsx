@@ -5,6 +5,7 @@ import { sanitizeSchedule } from "@/lib/scheduleHelpers";
 import AvailabilityModel from "@/models/AvailabilityModel";
 import { AvailabilityItems } from "@/typings/availability";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 type ScheduleDetailPageProps = {
   params: { scheduleId: string };
@@ -14,27 +15,29 @@ type ScheduleDetailPageProps = {
 export async function generateMetadata({
   params,
 }: ScheduleDetailPageProps): Promise<Metadata> {
-  await dbConnect();
+  try {
+    await dbConnect();
 
-  // read route params
-  const id = params.scheduleId;
+    // read route params
+    const id = params.scheduleId;
 
-  // fetch data
-  const schedule = await AvailabilityModel.findById(id).lean();
+    // fetch data
+    const schedule = await AvailabilityModel.findById(id).lean();
 
-  if (!schedule) {
+    if (!schedule) {
+      notFound();
+    }
+
+    // format the date to be in the format of "Month Year"
+
     return {
-      title: `Schedule Not Found | Booking AI`,
+      title: `Schedule for ${formatMonthYear(
+        `${schedule?.monthYear}`
+      )} | Booking AI`,
     };
+  } catch (error) {
+    notFound();
   }
-
-  // format the date to be in the format of "Month Year"
-
-  return {
-    title: `Schedule for ${formatMonthYear(
-      `${schedule?.monthYear}`
-    )} | Booking AI`,
-  };
 }
 
 export default async function ScheduleDetailsPage({
