@@ -30,7 +30,7 @@ export default function AppointLink() {
       title: "Copied Booking Link",
       description: "Your booking link has been copied to your clipboard.",
       action: (
-        <Button variant="subtle" as={Link} href={value}>
+        <Button variant="subtle" target="_blank" as={Link} href={value}>
           Preview
         </Button>
       ),
