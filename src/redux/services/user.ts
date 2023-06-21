@@ -15,8 +15,16 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/user",
   }),
-  tagTypes: ["User"],
+  tagTypes: ["User", "Booking Users"],
   endpoints: (builder) => ({
+    searchUser: builder.query<UserResponse, string>({
+      query: (query) => ({
+        url: `/search?query=${query}`,
+        method: "GET",
+      }),
+      providesTags: ["Booking Users"],
+    }),
+
     createUser: builder.mutation<UserResponse, UserParams>({
       query: (user) => ({
         url: "/create",
@@ -59,4 +67,6 @@ export const {
   useCreateUserMutation,
   useGetUserQuery,
   useCheckUsernameMutation,
+  useSearchUserQuery,
+  useLazySearchUserQuery,
 } = userApi;

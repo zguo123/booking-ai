@@ -35,6 +35,12 @@ export type UserDocument = Document<Types.ObjectId> & UserItemsWithoutId;
 export type UserResponse = APIRet & {
   user?: IUserItems | null;
   authUser?: MagicUserMetadata | null;
+  users?: IUserItems[] | null;
+};
+
+export type UserSearchResult = {
+  value: string;
+  label: string;
 };
 
 // request types
@@ -54,6 +60,15 @@ export type CreateUserRequest = Override<
   {
     body: {
       user: IUserItems;
+    };
+  }
+>;
+
+export type SearchUserRequest = Override<
+  NextApiRequest,
+  {
+    query: {
+      query: string;
     };
   }
 >;
@@ -83,6 +98,11 @@ export type CheckUsernameHandler = (
 
 export type GetUserHandlerInfoHandler = (
   req: GetUserRequest,
+  res: NextApiResponse<UserResponse>
+) => unknown;
+
+export type SearchUserByUsernameHandler = (
+  req: SearchUserRequest,
   res: NextApiResponse<UserResponse>
 ) => unknown;
 

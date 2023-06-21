@@ -57,7 +57,6 @@ const userSchema = new Schema<IUserItems>({
 });
 
 const UserModel =
-  (models.User as Model<UserItemsWithoutId>) ||
-  model<UserItemsWithoutId>("User", userSchema);
+  (models.User as Model<IUserItems>) || model<IUserItems>("User", userSchema);
 
 export default UserModel;
