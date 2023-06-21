@@ -1,7 +1,7 @@
 import ServicesPage from "@/components/PageContent/Booking/ServicesPage";
 
 export const metadata = {
-  title: "Book an Appointment",
+  title: "Select service(s)",
 };
 
 export default function BookingServicesPage() {
