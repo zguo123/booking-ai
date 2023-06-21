@@ -9,27 +9,20 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import {
-  Card,
-  CardBody
-} from "@saas-ui/react";
+import { Card, CardBody, CardHeader, CardTitle } from "@saas-ui/react";
 import Link from "next/link";
-export default function HomePage() {
+export default function SearchBookingSitePage() {
   return (
     <Center height="100vh">
       <Container>
         <Stack spacing="8">
           <Card>
+            <CardHeader>
+              <CardTitle fontSize="xl">Search for a booking site.</CardTitle>
+            </CardHeader>{" "}
             <CardBody as={Stack} spacing={"10"} p={10} textAlign="center">
-              <Stack spacing={2}>
-                <Heading fontWeight="bold" size="xl" as="h1">
-                  Welcome
-                </Heading>{" "}
-                <Text color="muted" fontSize="xl">
-                  How would you like to get started?
-                </Text>
-              </Stack>
-              <ButtonGroup size="md" w="full">
+              <Stack spacing={2}></Stack>
+              <ButtonGroup size="lg" w="full">
                 <Button w="full" as={Link} href="/login" variant="secondary">
                   Login
                 </Button>
