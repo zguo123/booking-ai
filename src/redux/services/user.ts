@@ -7,7 +7,7 @@
  */
 
 import { ErrorType } from "@/typings/global";
-import { IUserItems, UserParams, UserResponse } from "@/typings/user";
+import { UserParams, UserResponse } from "@/typings/user";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 export const userApi = createApi({
@@ -15,7 +15,7 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/user",
   }),
-  tagTypes: ["User", "Booking Users"],
+  tagTypes: ["User", "Booking Users", "User Details"],
   endpoints: (builder) => ({
     searchUser: builder.query<UserResponse, string>({
       query: (query) => ({
@@ -60,6 +60,14 @@ export const userApi = createApi({
       }),
       providesTags: ["User"],
     }),
+
+    getUserInfo: builder.query<UserResponse, string>({
+      query: (userId) => ({
+        url: `/options/${userId}/retrieve`,
+        method: "GET",
+      }),
+      providesTags: ["User", "User Details"],
+    }),
   }),
 });
 
@@ -69,4 +77,6 @@ export const {
   useCheckUsernameMutation,
   useSearchUserQuery,
   useLazySearchUserQuery,
+  useGetUserInfoQuery,
+  useLazyGetUserInfoQuery,
 } = userApi;

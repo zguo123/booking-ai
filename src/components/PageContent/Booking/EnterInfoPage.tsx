@@ -1,6 +1,7 @@
 "use client";
 
 import BookingLayoutBase from "@/components/Base/BookingLayoutBase";
+import useBookBaseUrl from "@/hooks/useBookBaseUrl";
 import { InfoIcon } from "@chakra-ui/icons";
 import {
   Container,
@@ -58,10 +59,12 @@ registerFieldType(
 export default function EnterInfoPage() {
   const router = useRouter();
 
+  const bookBase = useBookBaseUrl();
+
   const onSubmit = (params: any) => {
     return new Promise((resolve) => {
       setTimeout(resolve, 1000);
-      router.push("/book/details");
+      router.push(`${bookBase}/details`);
     });
   };
 

@@ -10,6 +10,8 @@ import { MagicUserMetadata } from "magic";
 import mongoose, { Document, ObjectId, Types } from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import { APIRet, Override } from "./global";
+import { ServiceItems } from "./service";
+import { AvailabilityItems } from "./availability";
 
 // database schemas
 export interface IUserItems {
@@ -36,6 +38,8 @@ export type UserResponse = APIRet & {
   user?: IUserItems | null;
   authUser?: MagicUserMetadata | null;
   users?: IUserItems[] | null;
+  services?: ServiceItems[] | null;
+  availabilitySchedules?: AvailabilityItems[] | null;
 };
 
 export type UserSearchResult = {
@@ -73,6 +77,15 @@ export type SearchUserRequest = Override<
   }
 >;
 
+export type GenericUserRequest = Override<
+  NextApiRequest,
+  {
+    query: {
+      userId: string;
+    };
+  }
+>;
+
 export const GetUserRequest = NextApiRequest;
 
 // handler types
@@ -103,6 +116,11 @@ export type GetUserHandlerInfoHandler = (
 
 export type SearchUserByUsernameHandler = (
   req: SearchUserRequest,
+  res: NextApiResponse<UserResponse>
+) => unknown;
+
+export type GenericUserHandler = (
+  req: GenericUserRequest,
   res: NextApiResponse<UserResponse>
 ) => unknown;
 

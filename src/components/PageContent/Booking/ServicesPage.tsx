@@ -2,6 +2,7 @@
 
 import BookingLayoutBase from "@/components/Base/BookingLayoutBase";
 import ServiceCheckbox from "@/components/Base/ServiceCheckbox";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 import { sampleServices } from "@/lib/consts/services";
 import { Heading, Stack, Text, useCheckboxGroup } from "@chakra-ui/react";
 
@@ -10,8 +11,11 @@ export default function ServicesPage() {
     defaultValue: [],
   });
 
+  const { services, isUserLoading } = useGetUserInfo();
+
   return (
     <BookingLayoutBase
+      isLoading={isUserLoading}
       nextBtnProps={{
         isDisabled: value.length === 0,
       }}
@@ -26,7 +30,7 @@ export default function ServicesPage() {
           </Text>{" "}
         </Stack>{" "}
         <Stack mt={10} spacing={4}>
-          {sampleServices.map((service) => (
+          {services?.map((service) => (
             <ServiceCheckbox
               key={service?._id}
               {...service}

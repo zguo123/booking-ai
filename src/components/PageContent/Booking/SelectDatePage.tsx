@@ -1,6 +1,7 @@
 "use client";
 
 import BookingLayoutBase from "@/components/Base/BookingLayoutBase";
+import useBookBaseUrl from "@/hooks/useBookBaseUrl";
 import { sampleDates } from "@/lib/consts/dates";
 import { convert12HourTo24Hour } from "@/lib/dateHelpers";
 import { WarningIcon } from "@chakra-ui/icons";
@@ -30,13 +31,15 @@ import {
   EmptyStateIcon,
   EmptyStateTitle,
 } from "@saas-ui/react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 
 export default function SelectDatePage() {
   const [value, setValue] = React.useState<DateValue>(
     today(getLocalTimeZone())
   );
+
+  const bookBase = useBookBaseUrl();
 
   const [newTime, setTime] = React.useState<string>("");
 
@@ -65,7 +68,7 @@ export default function SelectDatePage() {
 
     setChosenTime(dateTime);
 
-    router?.push("/book/contact");
+    router?.push(`${bookBase}/contact`);
   };
 
   return (

@@ -20,13 +20,13 @@ export default function NotFoundPage() {
   const router = useRouter();
 
   return (
-    <ErrorPage h="100%">
+    <ErrorPage h="100%" suppressHydrationWarning>
       <EmptyStateContainer colorScheme="primary">
         <EmptyStateBody>
-          <EmptyStateIcon as={WarningIcon} fontSize='2xl' />
+          <EmptyStateIcon as={WarningIcon} fontSize="" />
 
           <EmptyStateTitle>
-            <Heading as="h1" size='xl'>
+            <Heading as="h1" size="xl">
               The page you are looking for does not exist.
             </Heading>
           </EmptyStateTitle>
