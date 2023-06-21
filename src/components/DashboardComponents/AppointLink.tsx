@@ -27,8 +27,8 @@ export default function AppointLink() {
 
   if (hasCopied) {
     snackbar.success({
-      title: "Copied to clipboard",
-      description: "Your appointment link has been copied to your clipboard.",
+      title: "Copied Booking Link",
+      description: "Your booking link has been copied to your clipboard.",
       action: (
         <Button variant="subtle" as={Link} href={value}>
           Preview
@@ -42,8 +42,21 @@ export default function AppointLink() {
       {" "}
       <Skeleton isLoaded={!isAuthLoading && !!host}>
         <HStack>
-          <Card>
-            <CardBody maxW="10rem" isTruncated px={2} py={1.5}>
+          <Card
+            display={{
+              base: "none",
+              lg: "block",
+            }}
+          >
+            <CardBody
+              maxW={{
+                base: "5rem",
+                lg: "12rem",
+              }}
+              isTruncated
+              px={2}
+              py={1.5}
+            >
               {value}
             </CardBody>
           </Card>
@@ -53,7 +66,7 @@ export default function AppointLink() {
             variant="solid"
             colorScheme="primary"
           >
-            Copy
+            Copy Link
           </Button>
         </HStack>{" "}
       </Skeleton>
