@@ -5,17 +5,9 @@ import {
   AppointmentResponse,
 } from "@/typings/appointments";
 import { AvailabilityItems, WorkingHours } from "@/typings/availability";
-import { TimeStatus, TimeStatusProps } from "@/typings/service";
+import { TimeStatusProps } from "@/typings/service";
 import {
-  CalendarDateTime,
-  Time,
-  getLocalTimeZone,
-  parseTime,
-  parseDateTime,
-  today,
-  parseAbsolute,
-  parseZonedDateTime,
-  parseAbsoluteToLocal,
+  parseAbsoluteToLocal
 } from "@internationalized/date";
 import { serialize } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
