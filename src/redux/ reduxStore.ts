@@ -3,6 +3,7 @@ import { createAuthApi } from "./services/auth";
 import { userApi } from "./services/user";
 import { servicesApi } from "./services/service";
 import { availabilityApi } from "./services/availability";
+import { bookAppointmentApi } from "./services/bookAppointment";
 
 export const store = configureStore({
   devTools: process.env.NODE_ENV !== "production",
@@ -11,13 +12,15 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [servicesApi.reducerPath]: servicesApi.reducer,
     [availabilityApi.reducerPath]: availabilityApi.reducer,
+    [bookAppointmentApi.reducerPath]: bookAppointmentApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       createAuthApi.middleware,
       userApi.middleware,
       servicesApi.middleware,
-      availabilityApi.middleware
+      availabilityApi.middleware,
+      bookAppointmentApi.middleware
     ),
 });
 

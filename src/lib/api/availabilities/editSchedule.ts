@@ -63,6 +63,7 @@ export default async (
     const availabilityExists = await AvailabilityModel.exists({
       monthYear: availabilityData.monthYear,
       user: userId,
+      $and: [{ _id: { $ne: scheduleId } }],
     });
 
     if (!availability) {

@@ -2,9 +2,12 @@
 
 import BookingLayoutBase from "@/components/Base/BookingLayoutBase";
 import ServiceCheckbox from "@/components/Base/ServiceCheckbox";
+import useBookBaseUrl from "@/hooks/useBookBaseUrl";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 import { sampleServices } from "@/lib/consts/services";
+import { useAddServicesMutation } from "@/redux/services/bookAppointment";
 import { Heading, Stack, Text, useCheckboxGroup } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 export default function ServicesPage() {
   const { value, getCheckboxProps } = useCheckboxGroup({
@@ -13,11 +16,32 @@ export default function ServicesPage() {
 
   const { services, isUserLoading } = useGetUserInfo();
 
+  const base = useBookBaseUrl();
+
+  const router = useRouter();
+
+  const [
+    addServices,
+    { isLoading: isAddingServices },
+  ] = useAddServicesMutation();
+
+  const next = async () => {
+    try {
+      const res = await addServices(value as string[]).unwrap();
+
+      if (res?.success) {
+        router.push(`${base}/select-date`);
+      }
+    } catch (err) {}
+  };
+
   return (
     <BookingLayoutBase
       isLoading={isUserLoading}
       nextBtnProps={{
+        isLoading: isAddingServices,
         isDisabled: value.length === 0,
+        onClick: next,
       }}
     >
       <Stack pb={4} w="full">
@@ -34,7 +58,7 @@ export default function ServicesPage() {
             <ServiceCheckbox
               key={service?._id}
               {...service}
-              {...getCheckboxProps({ value: service?._id })}
+              {...getCheckboxProps({ value: service?.name })}
             />
           ))}
         </Stack>

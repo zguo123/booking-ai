@@ -2,8 +2,12 @@
 
 import BookingLayoutBase from "@/components/Base/BookingLayoutBase";
 import useBookBaseUrl from "@/hooks/useBookBaseUrl";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
+import { getHours } from "@/lib/api/appointment/helpers";
 import { sampleDates } from "@/lib/consts/dates";
 import { convert12HourTo24Hour } from "@/lib/dateHelpers";
+import { useSelectTimeMutation } from "@/redux/services/bookAppointment";
+import { AvailabilityItems } from "@/typings/availability";
 import { WarningIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -17,7 +21,6 @@ import {
   DatePickerCalendar,
   DatePickerStatic,
   DateValue,
-  Time,
   getLocalTimeZone,
   parseTime,
   today,
@@ -31,8 +34,8 @@ import {
   EmptyStateIcon,
   EmptyStateTitle,
 } from "@saas-ui/react";
-import { useParams, useRouter } from "next/navigation";
-import React, { useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import React, { useMemo } from "react";
 
 export default function SelectDatePage() {
   const [value, setValue] = React.useState<DateValue>(
@@ -43,32 +46,44 @@ export default function SelectDatePage() {
 
   const [newTime, setTime] = React.useState<string>("");
 
-  const [chosenTime, setChosenTime] = React.useState<Date>();
+  const [selectTime, { isLoading: isSelectingTime }] = useSelectTimeMutation();
+
+  // user info
+  const { availabilitySchedules: schedules } = useGetUserInfo();
 
   const router = useRouter();
 
   const date = useMemo(() => {
-    return sampleDates.find((date) => {
-      return (
-        date.date.toDateString() ===
-        value?.toDate(getLocalTimeZone()).toDateString()
-      );
-    });
+    const currMonthYear = value.toString().split("-").slice(0, 2).join("-");
+
+    const hours = getHours(
+      schedules as AvailabilityItems[],
+      currMonthYear,
+      value?.toDate(getLocalTimeZone())?.toDateString()
+    );
+
+    return hours;
   }, [value]);
 
-  const chooseTime = (selectedTime: string) => {
-    // convert DateValue + string to Date
-    const time = parseTime(convert12HourTo24Hour(selectedTime)); // Assuming this returns a Time object
-    const date = value?.toDate(getLocalTimeZone()); // Assuming this returns a valid Date object
+  const chooseTime = async (selectedTime: string) => {
+    try {
+      // convert DateValue + string to Date
+      const time = parseTime(convert12HourTo24Hour(selectedTime)); // Assuming this returns a Time object
+      const date = value?.toDate(getLocalTimeZone()); // Assuming this returns a valid Date object
 
-    const dateTime = new Date(date);
-    dateTime.setHours(time.hour);
-    dateTime.setMinutes(time.minute);
-    dateTime.setSeconds(time.second);
+      const dateTime = new Date(date);
+      dateTime.setHours(time.hour);
+      dateTime.setMinutes(time.minute);
+      dateTime.setSeconds(time.second);
 
-    setChosenTime(dateTime);
+      const res = await selectTime(dateTime).unwrap();
 
-    router?.push(`${bookBase}/contact`);
+      if (res?.success) {
+        router?.push(`${bookBase}/contact`);
+      }
+    } catch (err) {}
+
+    // router?.push(`${bookBase}/contact`);
   };
 
   return (
@@ -93,11 +108,12 @@ export default function SelectDatePage() {
           }}
           spacing={10}
         >
-          <Center>
+          <Center alignItems="flex-start">
             <Card>
               <CardBody p={4}>
                 <DatePickerStatic
                   value={value}
+                  minValue={today(getLocalTimeZone())}
                   onChange={(value) => {
                     if (!value) {
                       return;
@@ -116,20 +132,21 @@ export default function SelectDatePage() {
             <Heading size="md">
               Times for: {value?.toDate(getLocalTimeZone()).toDateString()}
             </Heading>
-            {date ? (
+            {date.length > 0 ? (
               <>
                 <SimpleGrid columns={3} spacing={3}>
-                  {date.times.map((time) => (
+                  {date.map((time) => (
                     <Button
                       size={{
                         base: "md",
                         md: "lg",
                       }}
                       variant="outline"
-                      key={`${time?.time}-${date?._id}`}
+                      key={`${time?.time}`}
                       isActive={
                         time.status === "available" && time.time === newTime
                       }
+                      isLoading={isSelectingTime}
                       onClick={() => {
                         // set time
                         setTime(time?.time);

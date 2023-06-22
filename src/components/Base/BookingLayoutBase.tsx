@@ -29,10 +29,12 @@ export default function BookingLayoutBase({
   nextBtnProps,
   backBtnProps,
   isLoading,
+  nextAction,
 }: {
   children: React.ReactNode;
   nextBtnProps?: ButtonProps;
   backBtnProps?: ButtonProps;
+  nextAction?: () => void;
   isLoading?: boolean;
 }) {
   const pathname = usePathname();
@@ -49,13 +51,13 @@ export default function BookingLayoutBase({
     fullName: `${user?.firstName} ${user?.lastName}`,
   };
 
-  const next = () => {
-    switch (pathname) {
-      case `${bookBase}`:
-        router?.push(`${bookBase}/select-date`);
-        break;
-    }
-  };
+  // const next = () => {
+  //   switch (pathname) {
+  //     case `${bookBase}`:
+  //       router?.push(`${bookBase}/select-date`);
+  //       break;
+  //   }
+  // };
 
   const back = () => {
     switch (pathname) {
@@ -136,7 +138,6 @@ export default function BookingLayoutBase({
                     variant="solid"
                     colorScheme="blue"
                     ml="auto"
-                    onClick={next}
                     {...nextBtnProps}
                   >
                     Next
