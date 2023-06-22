@@ -49,7 +49,7 @@ export default function SelectDatePage() {
   const [selectTime, { isLoading: isSelectingTime }] = useSelectTimeMutation();
 
   // user info
-  const { availabilitySchedules: schedules } = useGetUserInfo();
+  const { availabilitySchedules: schedules, isUserLoading } = useGetUserInfo();
 
   const router = useRouter();
 
@@ -63,7 +63,7 @@ export default function SelectDatePage() {
     );
 
     return hours;
-  }, [value]);
+  }, [value, schedules]);
 
   const chooseTime = async (selectedTime: string) => {
     try {
@@ -87,7 +87,7 @@ export default function SelectDatePage() {
   };
 
   return (
-    <BookingLayoutBase>
+    <BookingLayoutBase isLoading={isUserLoading}>
       <Stack w="full" pb={4}>
         <Stack spacing={3} pt={10}>
           <Heading size="2xl" textAlign="center">

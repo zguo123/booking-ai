@@ -74,6 +74,7 @@ export const getHours = (
   currMonthYear: string,
   dateString: string
 ): TimeStatusProps[] => {
+  
   let hours: TimeStatusProps[] = [];
 
   // schedule
