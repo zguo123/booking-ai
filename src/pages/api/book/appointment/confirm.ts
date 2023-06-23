@@ -1,7 +1,10 @@
+import bookAppointment from "@/lib/api/appointment/bookAppointment";
 import { getAppointmentCookie } from "@/lib/api/appointment/helpers";
-import selectDateTime from "@/lib/api/appointment/selectDateTime";
-import logger from "@/lib/logger";
-import { GenericAppointmentAPIHandler } from "@/typings/appointments";
+import dbConnect from "@/lib/dbConnect";
+import {
+  ContactInfo,
+  GenericAppointmentAPIHandler
+} from "@/typings/appointments";
 import { StatusCodes } from "http-status-codes";
 
 const selectDateTimeHandler: GenericAppointmentAPIHandler = async (
@@ -10,23 +13,36 @@ const selectDateTimeHandler: GenericAppointmentAPIHandler = async (
 ) => {
   const {
     method,
-    body: { appointmentData },
+    body: { appointmentData, userId },
   } = req;
 
+  await dbConnect();
+
+  
   switch (method) {
     case "POST":
       // find existing cookie data
       const cookieData = getAppointmentCookie(req);
 
-      const { status, success } = await selectDateTime(
-        appointmentData?.appointmentDate || new Date(),
+      const contactData: ContactInfo = {
+        firstName: appointmentData?.firstName,
+        lastName: appointmentData?.lastName,
+        email: appointmentData?.email,
+        phone: appointmentData?.phone,
+        appointmentNotes: appointmentData?.appointmentNotes,
+      };
+
+      const { status, success, ...rest } = await bookAppointment(
+        contactData,
         res,
+        userId as string,
         cookieData || undefined
       );
 
       return res.status(status).json({
         success,
         status,
+        ...rest,
       });
 
     default:

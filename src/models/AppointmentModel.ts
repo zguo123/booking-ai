@@ -2,9 +2,17 @@ import { AppointmentItems } from "@/typings/appointments";
 import { Model, Schema, model, models } from "mongoose";
 
 export const appointmentSchema = new Schema<AppointmentItems>({
-  name: {
+  user: {
+    type:  String, 
+    required: [true, "Please enter your user"],
+  }, 
+  firstName: {
     type: String,
-    required: [true, "Please enter your name"],
+    required: [true, "Please enter your first name"],
+  },
+  lastName: {
+    type: String,
+    required: [true, "Please enter your last name"],
   },
   email: {
     type: String,

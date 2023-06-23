@@ -18,8 +18,12 @@ export default function AppointLink() {
 
   const { user, isLoading: isAuthLoading } = useAuthInfo();
 
-  const { onCopy, value, hasCopied } = useClipboard(`
-    ${host}/book/${user?._id}`);
+  const { onCopy, value, hasCopied } = useClipboard(
+    isAuthLoading
+      ? ""
+      : `
+    ${host}/book/${user?._id}`
+  );
 
   const copyLink = () => {
     onCopy();

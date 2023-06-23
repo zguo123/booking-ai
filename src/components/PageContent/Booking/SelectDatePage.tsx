@@ -35,7 +35,7 @@ import {
   EmptyStateTitle,
 } from "@saas-ui/react";
 import { useRouter } from "next/navigation";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 
 export default function SelectDatePage() {
   const [value, setValue] = React.useState<DateValue>(
@@ -65,26 +65,29 @@ export default function SelectDatePage() {
     return hours;
   }, [value, schedules]);
 
-  const chooseTime = async (selectedTime: string) => {
-    try {
-      // convert DateValue + string to Date
-      const time = parseTime(convert12HourTo24Hour(selectedTime)); // Assuming this returns a Time object
-      const date = value?.toDate(getLocalTimeZone()); // Assuming this returns a valid Date object
+  const chooseTime = useCallback(
+    async (selectedTime: string) => {
+      try {
+        // convert DateValue + string to Date
+        const time = parseTime(convert12HourTo24Hour(selectedTime)); // Assuming this returns a Time object
+        const date = value?.toDate(getLocalTimeZone()); // Assuming this returns a valid Date object
 
-      const dateTime = new Date(date);
-      dateTime.setHours(time.hour);
-      dateTime.setMinutes(time.minute);
-      dateTime.setSeconds(time.second);
+        const dateTime = new Date(date);
+        dateTime.setHours(time.hour);
+        dateTime.setMinutes(time.minute);
+        dateTime.setSeconds(time.second);
 
-      const res = await selectTime(dateTime).unwrap();
+        const res = await selectTime(dateTime).unwrap();
 
-      if (res?.success) {
-        router?.push(`${bookBase}/contact`);
-      }
-    } catch (err) {}
+        if (res?.success) {
+          router?.push(`${bookBase}/contact`);
+        }
+      } catch (err) {}
 
-    // router?.push(`${bookBase}/contact`);
-  };
+      // router?.push(`${bookBase}/contact`);
+    },
+    [value]
+  );
 
   return (
     <BookingLayoutBase isLoading={isUserLoading}>

@@ -1,4 +1,5 @@
 import { days } from "@/lib/consts/days";
+import { removeTokenCookie } from "@/lib/cookies";
 import { getDayAsName } from "@/lib/dateHelpers";
 import {
   AppointmentCookieData,
@@ -6,9 +7,7 @@ import {
 } from "@/typings/appointments";
 import { AvailabilityItems, WorkingHours } from "@/typings/availability";
 import { TimeStatusProps } from "@/typings/service";
-import {
-  parseAbsoluteToLocal
-} from "@internationalized/date";
+import { parseAbsoluteToLocal } from "@internationalized/date";
 import { serialize } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -16,15 +15,17 @@ export const setAppointmentCookie = (
   res: NextApiResponse<AppointmentResponse>,
   cookieData: AppointmentCookieData
 ) => {
+  removeTokenCookie(res);
+
   // set Temporary cookie
   const appointmentCookie = serialize(
     "appointment",
     JSON.stringify(cookieData),
     {
       httpOnly: true,
-
       secure: process.env.NODE_ENV !== "development",
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+      // 10 minutes
+      maxAge: 60 * 10,
       sameSite: "strict",
       path: "/",
     }
@@ -66,7 +67,6 @@ export const getHours = (
   currMonthYear: string,
   dateString: string
 ): TimeStatusProps[] => {
-  
   let hours: TimeStatusProps[] = [];
 
   // schedule

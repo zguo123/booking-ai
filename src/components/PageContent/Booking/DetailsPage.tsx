@@ -1,62 +1,44 @@
 "use client";
 
 import BookingLayoutBase from "@/components/Base/BookingLayoutBase";
+import useAppointmentInfo from "@/hooks/useAppointmentInfo";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import {
   Button,
   ButtonGroup,
   Center,
   Heading,
-  Input,
-  InputGroup,
+  SkeletonText,
   Stack,
   Text,
-  forwardRef,
 } from "@chakra-ui/react";
-import { registerFieldType } from "@saas-ui/react";
-import ReactInputMask from "react-input-mask";
-
-registerFieldType(
-  "maskedInput",
-  forwardRef(
-    ({ type = "text", leftAddon, rightAddon, size, mask, ...rest }, ref) => {
-      const inputProps = {
-        type,
-        size,
-        ...rest,
-        ref,
-      };
-      const input = (
-        <Input as={ReactInputMask} mask={"(999) 999-9999"} {...inputProps} />
-      );
-
-      if (leftAddon || rightAddon) {
-        return (
-          <InputGroup size={size}>
-            {leftAddon}
-            {input}
-            {rightAddon}
-          </InputGroup>
-        );
-      }
-
-      return input;
-    }
-  ),
-  {
-    isControlled: true,
-  }
-);
+import { DateFormatter, parseAbsolute } from "@internationalized/date";
+import { useMemo } from "react";
 
 export default function DetailsPage() {
-  const onSubmit = (params: any) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, 1000);
-    });
-  };
+  const { tempAppointmentData, isAppointmentLoading } = useAppointmentInfo();
+
+  // console.log(tempAppointmentData);
+
+  const appointmentDate = useMemo(() => {
+    if (isAppointmentLoading) return "";
+    const dateTime = parseAbsolute(
+      (tempAppointmentData?.appointmentDate as Date)?.toString(),
+      "America/Toronto"
+    ).toDate();
+
+    const formattedDate = new DateFormatter("en-CA", {
+      timeZone: "America/Toronto",
+      dateStyle: "long",
+      timeStyle: "short",
+      hour12: true,
+    }).format(dateTime);
+
+    return formattedDate;
+  }, [tempAppointmentData, isAppointmentLoading]);
 
   return (
-    <BookingLayoutBase>
+    <BookingLayoutBase isLoading={isAppointmentLoading}>
       <Center flex="1" pb={4}>
         <Stack textAlign="center" justifyContent="center" spacing={10}>
           <CheckCircleIcon
@@ -68,12 +50,14 @@ export default function DetailsPage() {
             <Heading size="2xl" textAlign="center">
               Appointment Booked!
             </Heading>
-            <Text fontSize="2xl" color="muted" textAlign="center">
-              Awesome! you're all set. We'll see you on{" "}
-              <Text as="span" fontWeight="bold">
-                Sunday, June 20th at 10:00 AM
+            <Stack spacing={1}>
+              <Text fontSize="2xl" color="muted" textAlign="center">
+                Awesome! you're all set. We'll see you on:{" "}
+              </Text>{" "}
+              <Text fontSize="2xl" color="muted" fontWeight="bold">
+                {appointmentDate || ""}
               </Text>
-            </Text>{" "}
+            </Stack>
             <ButtonGroup
               as={Stack}
               direction={{ base: "column", lg: "row" }}

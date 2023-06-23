@@ -13,6 +13,7 @@ export default async (
   cookieData?: AppointmentCookieData
 ): Promise<AppointmentResponse> => {
   try {
+
     setAppointmentCookie(res, {
       ...cookieData,
       appointmentDate,

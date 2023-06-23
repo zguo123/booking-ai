@@ -1,7 +1,9 @@
+import { ContactInfo } from "./../../typings/appointments.d";
 import {
   AppointmentCookieData,
   AppointmentResponse,
 } from "@/typings/appointments";
+import { ErrorType } from "@/typings/global";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 export const bookAppointmentApi = createApi({
@@ -43,10 +45,46 @@ export const bookAppointmentApi = createApi({
         invalidatesTags: ["BookAppointment", "BookAppointments"],
       }),
     }),
+
+    confirmAppointment: builder.mutation<
+      AppointmentResponse,
+      ContactInfo & { userId: string }
+    >({
+      query: ({ userId, ...contactData }) => ({
+        url: `/confirm`,
+        method: "POST",
+        body: {
+          appointmentData: { ...contactData },
+          userId,
+        },
+      }),
+
+      transformErrorResponse: (error: any): ErrorType["message"] => {
+        return error?.data?.error?.message;
+      },
+    }),
+
+    retrieveAppointments: builder.query<
+      AppointmentResponse,
+      {
+        userId: string;
+        appointmentId?: string;
+      }
+    >({
+      query: ({ userId, appointmentId }) => ({
+        url: `/retrieve?userId=${userId}${
+          appointmentId ? `&appointmentId=${appointmentId}` : ""
+        }`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
 export const {
   useAddServicesMutation,
   useSelectTimeMutation,
+  useConfirmAppointmentMutation,
+  useRetrieveAppointmentsQuery,
+  useLazyRetrieveAppointmentsQuery,
 } = bookAppointmentApi;

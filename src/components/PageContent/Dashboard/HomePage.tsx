@@ -1,17 +1,21 @@
 "use client";
 
-import {
-  appointmentData,
-  appointmentDataColumns,
-} from "@/lib/consts/appointments";
+import useAppointmentInfo from "@/hooks/useAppointmentInfo";
+import { appointmentDataColumns } from "@/lib/consts/appointments";
 import { formatPrice } from "@/lib/helpers/appointment";
+import { AppointmentItems } from "@/typings/appointments";
 import { SettingsIcon } from "@chakra-ui/icons";
-import { Button, Flex, IconButton } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import {
+  CalendarDateTime,
+  DateFormatter,
+  parseAbsolute,
+  parseZonedDateTime,
+} from "@internationalized/date";
 import { DataGrid, DataGridPagination } from "@saas-ui/pro";
-import { FiMoreVertical } from "react-icons/fi";
 
 export default function HomePage() {
-  // convert the date to a string
+  const { appointments: appointmentData } = useAppointmentInfo();
 
   return (
     <DataGrid
@@ -27,13 +31,29 @@ export default function HomePage() {
           cell: () => <Button leftIcon={<SettingsIcon />}>Manage</Button>,
         },
       ]}
-      data={appointmentData.map((appointment) => {
-        return {
-          ...appointment,
-          appointmentDate: appointment.appointmentDate.toDateString(),
-          totalPrice: formatPrice(appointment.totalPrice),
-        };
-      })}
+      data={((appointmentData as AppointmentItems[]) || [])?.map(
+        (appointment) => {
+          const appointmentDate = parseAbsolute(
+            appointment?.appointmentDate.toString(),
+            "America/Toronto"
+          ).toDate();
+
+          const formattedDate = new DateFormatter("en-CA", {
+            timeZone: "America/Toronto",
+            dateStyle: "long",
+            timeStyle: "short",
+            hour12: true,
+          }).format(appointmentDate);
+
+          return {
+            ...appointment,
+
+            name: `${appointment?.firstName} ${appointment?.lastName}`,
+            date: formattedDate,
+            totalPrice: formatPrice(appointment.totalPrice),
+          };
+        }
+      )}
     >
       <DataGridPagination />
     </DataGrid>

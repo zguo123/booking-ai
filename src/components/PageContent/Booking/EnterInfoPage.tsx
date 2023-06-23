@@ -2,6 +2,9 @@
 
 import BookingLayoutBase from "@/components/Base/BookingLayoutBase";
 import useBookBaseUrl from "@/hooks/useBookBaseUrl";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
+import { useConfirmAppointmentMutation } from "@/redux/services/bookAppointment";
+import { ContactInfo } from "@/typings/appointments";
 import { InfoIcon } from "@chakra-ui/icons";
 import {
   Container,
@@ -19,9 +22,12 @@ import {
   Form,
   FormLayout,
   SubmitButton,
+  UseFormReturn,
   registerFieldType,
+  useSnackbar,
 } from "@saas-ui/react";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
 import ReactInputMask from "react-input-mask";
 
 registerFieldType(
@@ -61,11 +67,35 @@ export default function EnterInfoPage() {
 
   const bookBase = useBookBaseUrl();
 
-  const onSubmit = (params: any) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, 1000);
-      router.push(`${bookBase}/details`);
-    });
+  const formRef = useRef<UseFormReturn>(null);
+
+  const { user } = useGetUserInfo();
+
+  const [
+    confirm,
+    { isLoading: isConfirming },
+  ] = useConfirmAppointmentMutation();
+
+  const onSubmit = async (data: ContactInfo) => {
+    try {
+      const res = await confirm({
+        userId: user?._id as string,
+        ...data,
+      }).unwrap();
+
+      if (res.success) {
+        return router.push(`${bookBase}/details`);
+      }
+    } catch (error) {
+      const err = error as { [key: string]: string };
+
+      Object.keys(err).forEach((key: string) => {
+        formRef.current?.setError(key, {
+          type: "custom",
+          message: err[key as string] as string,
+        });
+      });
+    }
   };
 
   return (
@@ -81,12 +111,18 @@ export default function EnterInfoPage() {
           <Container
             mt={4}
             as={Form}
+            ref={formRef}
             maxW="container.lg"
             defaultValues={{
-              name: "",
-              description: "",
+              firstName: "",
+              lastName: "",
+              email: "",
+              phone: "",
+              appointmentNotes: "",
             }}
-            onSubmit={onSubmit}
+            onSubmit={(value) => {
+              onSubmit(value as ContactInfo);
+            }}
           >
             <FormLayout spacing={3}>
               {" "}
@@ -146,6 +182,7 @@ export default function EnterInfoPage() {
                 variant="solid"
                 w="full"
                 size="lg"
+                isLoading={isConfirming}
                 disableIfInvalid
               >
                 Book Appointment

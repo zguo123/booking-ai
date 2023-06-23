@@ -5,21 +5,35 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export type AppointmentItems = {
   _id?: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   appointmentDate: Date;
   services: string[];
   totalPrice: number;
   appointmentNotes?: string;
+  user: string;
 };
 
 export type AppointmentRequestData = Pick<
   AppointmentItems,
-  "name" | "email" | "phone" | "appointmentDate" | "services" | "totalPrice"
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "phone"
+  | "appointmentDate"
+  | "services"
+  | "totalPrice"
+  | "appointmentNotes"
 >;
 
 export type AppointmentCookieData = Partial<AppointmentRequestData>;
+
+export type ContactInfo = Pick<
+  AppointmentCookieData,
+  "firstName" | "lastName" | "email" | "phone" | "appointmentNotes"
+>;
 
 export type AppointmentDataStructure = ColumnDef<
   keyof AppointmentItems,
