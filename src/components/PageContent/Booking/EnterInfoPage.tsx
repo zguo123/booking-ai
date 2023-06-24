@@ -132,7 +132,7 @@ export default function EnterInfoPage() {
                 type="maskedInput"
                 inputMode="tel"
                 label="Phone"
-                help="We'll send you a text to confirm your appointment"
+                help="We might send you updates about your appointment"
                 rules={{
                   required: "Phone is required",
                 }}
@@ -143,7 +143,11 @@ export default function EnterInfoPage() {
                 name="email"
                 label="Email"
                 type="email"
-                help="If you want to receive a confirmation email"
+                help="We'll send you a confirmation email with your appointment details"
+                isRequired
+                rules={{
+                  required: "Email is required",
+                }}
               />
               <FormLayout columns={2}>
                 <Field
@@ -173,9 +177,10 @@ export default function EnterInfoPage() {
               />
               <Divider my={0.5} />
               <Text fontSize="md" color="muted">
-                Upon booking, you will receive a text message to confirm your
-                appointment and an account will be created for you to manage
-                your appointments.
+                Upon booking an appointment with us, you will receive a
+                confirmation email from <strong>schedlu</strong> confirming your
+                appointment details. You will have the option to cancel your
+                appointment if you need to.
               </Text>
               <SubmitButton
                 colorScheme="blue"
