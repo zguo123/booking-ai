@@ -2,22 +2,14 @@ import {
   Body,
   Button,
   Container,
-  Font,
   Head,
   Heading,
-  Hr,
   Html,
   Img,
-  Link,
   Preview,
   Section,
   Text,
 } from "@react-email/components";
-import * as React from "react";
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
 
 const main = {
   backgroundColor: "#f6f9fc",
@@ -63,11 +55,6 @@ const detailSubHeader = {
   fontSize: "25px",
 };
 
-const anchor = {
-  color: "#556cd6",
-  border: "1px solid rgb(0,0,0, 0.1)",
-};
-
 const button = {
   backgroundColor: "#012C43",
   borderRadius: "5px",
@@ -104,13 +91,21 @@ const details = {
   border: "1px solid rgb(0,0,0, 0.1)",
 };
 
-const footer = {
-  color: "#8898aa",
-  fontSize: "12px",
-  lineHeight: "16px",
+export type AppointmentConfirmedProps = {
+  appointmentDate: string;
+  services: string;
+  price: string;
+  cancelUrl: string;
+  rescheduleUrl: string;
 };
 
-export const AppointmentConfirmed = () => (
+export const AppointmentConfirmed = ({
+  appointmentDate = "Sunday 20th June 2021, 10:00am",
+  services = "Haircut",
+  price = "$20",
+  cancelUrl = "https://www.schedlu.ca",
+  rescheduleUrl = "https://www.schedlu.ca",
+}: Partial<AppointmentConfirmedProps>) => (
   <Html lang="en">
     <Head />
     <Preview>Your appointment is now confirmed!</Preview>
@@ -133,42 +128,28 @@ export const AppointmentConfirmed = () => (
             <Section>
               <Text style={detailHeader}>
                 <b>Appointment Date</b>
-                <Text style={detailSubHeader}>
-                  Sunday 20th June 2021, 10:00am
-                </Text>
+                <Text style={detailSubHeader}>{appointmentDate}</Text>
               </Text>{" "}
             </Section>{" "}
             <Section>
               <Text style={detailHeader}>
                 <b>Services</b>
-                <Text style={detailSubHeader}>
-                  Sunday 20th June 2021, 10:00am
-                </Text>
+                <Text style={detailSubHeader}>{services}</Text>
               </Text>{" "}
             </Section>
             <Section>
               <Text style={detailHeader}>
                 <b>Total Price</b>
-                <Text style={detailSubHeader}>$100</Text>
+                <Text style={detailSubHeader}>{price}</Text>
               </Text>{" "}
             </Section>
           </Section>
 
           <Section>
-            <Button
-              pX={0}
-              pY={15}
-              style={button}
-              href="https://dashboard.stripe.com/login"
-            >
+            <Button pX={0} pY={15} style={button} href={rescheduleUrl}>
               Reschedule or Change Appointment
             </Button>{" "}
-            <Button
-              pX={0}
-              pY={15}
-              style={cancelAppointment}
-              href="https://dashboard.stripe.com/login"
-            >
+            <Button pX={0} pY={15} style={cancelAppointment} href={cancelUrl}>
               Cancel Appointment
             </Button>
           </Section>

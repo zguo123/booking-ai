@@ -1,4 +1,4 @@
-import { parseDate } from "@internationalized/date";
+import { DateFormatter, parseAbsolute, parseDate } from "@internationalized/date";
 
 const months = [
   "January",
@@ -72,3 +72,19 @@ export function convert12HourTo24Hour(time12h: string): string {
 
   return `${hours}:${minutes}`;
 }
+
+export const formatDate = (appointment: Date): string => {
+  const appointmentDate = parseAbsolute(
+    appointment.toString(),
+    "America/Toronto"
+  ).toDate();
+
+  const formattedDate = new DateFormatter("en-CA", {
+    timeZone: "America/Toronto",
+    dateStyle: "long",
+    timeStyle: "short",
+    hour12: true,
+  }).format(appointmentDate);
+
+  return formattedDate;
+};

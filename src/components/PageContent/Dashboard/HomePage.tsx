@@ -2,6 +2,7 @@
 
 import useAppointmentInfo from "@/hooks/useAppointmentInfo";
 import { appointmentDataColumns } from "@/lib/consts/appointments";
+import { formatDate } from "@/lib/dateHelpers";
 import { formatPrice } from "@/lib/helpers/appointment";
 import { AppointmentItems } from "@/typings/appointments";
 import { SettingsIcon } from "@chakra-ui/icons";
@@ -33,21 +34,10 @@ export default function HomePage() {
       ]}
       data={((appointmentData as AppointmentItems[]) || [])?.map(
         (appointment) => {
-          const appointmentDate = parseAbsolute(
-            appointment?.appointmentDate.toString(),
-            "America/Toronto"
-          ).toDate();
-
-          const formattedDate = new DateFormatter("en-CA", {
-            timeZone: "America/Toronto",
-            dateStyle: "long",
-            timeStyle: "short",
-            hour12: true,
-          }).format(appointmentDate);
+          const formattedDate = formatDate(appointment.appointmentDate);
 
           return {
             ...appointment,
-
             name: `${appointment?.firstName} ${appointment?.lastName}`,
             date: formattedDate,
             totalPrice: formatPrice(appointment.totalPrice),
