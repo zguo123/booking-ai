@@ -65,7 +65,8 @@ export const getAppointmentCookie = (
 export const getHours = (
   schedules: AvailabilityItems[],
   currMonthYear: string,
-  dateString: string
+  dateString: string,
+  duration: number
 ): TimeStatusProps[] => {
   let hours: TimeStatusProps[] = [];
 
@@ -120,7 +121,9 @@ export const getHours = (
   toTime.setHours(toHour);
   toTime.setMinutes(toMin);
 
-  const interval = 30 * 60 * 1000; // 30 min
+  // interval in minutes from duration
+  const interval = duration * 60 * 1000;
+
 
   for (
     let time = fromTime.getTime();

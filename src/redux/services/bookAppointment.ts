@@ -17,13 +17,19 @@ export const bookAppointmentApi = createApi({
   endpoints: (builder) => ({
     addServices: builder.mutation<
       AppointmentResponse,
-      AppointmentCookieData["services"]
+      {
+        services: string[];
+        userId: string;
+      }
     >({
-      query: (services) => ({
+      query: ({ userId, services }) => ({
         url: `/select-services`,
         method: "POST",
         body: {
-          appointmentData: { services },
+          userId,
+          appointmentData: {
+            services: [...services],
+          },
         },
       }),
 

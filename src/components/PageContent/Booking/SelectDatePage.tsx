@@ -7,6 +7,7 @@ import { getHours } from "@/lib/api/appointment/helpers";
 import { sampleDates } from "@/lib/consts/dates";
 import { convert12HourTo24Hour } from "@/lib/dateHelpers";
 import { useSelectTimeMutation } from "@/redux/services/bookAppointment";
+import { AppointmentCookieData } from "@/typings/appointments";
 import { AvailabilityItems } from "@/typings/availability";
 import { WarningIcon } from "@chakra-ui/icons";
 import {
@@ -37,7 +38,13 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 
-export default function SelectDatePage() {
+export type SelectDatePageProps = {
+  appointmentCookie: AppointmentCookieData;
+};
+
+export default function SelectDatePage({
+  appointmentCookie,
+}: SelectDatePageProps) {
   const [value, setValue] = React.useState<DateValue>(
     today(getLocalTimeZone())
   );
@@ -59,7 +66,8 @@ export default function SelectDatePage() {
     const hours = getHours(
       schedules as AvailabilityItems[],
       currMonthYear,
-      value?.toDate(getLocalTimeZone())?.toDateString()
+      value?.toDate(getLocalTimeZone())?.toDateString(),
+      appointmentCookie?.totalDuration as number
     );
 
     return hours;

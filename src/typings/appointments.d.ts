@@ -14,6 +14,7 @@ export type AppointmentItems = {
   totalPrice: number;
   appointmentNotes?: string;
   user: string;
+  totalDuration: number;
 };
 
 export type AppointmentRequestData = Pick<
@@ -26,6 +27,7 @@ export type AppointmentRequestData = Pick<
   | "services"
   | "totalPrice"
   | "appointmentNotes"
+  | "totalDuration"
 >;
 
 export type AppointmentCookieData = Partial<AppointmentRequestData>;

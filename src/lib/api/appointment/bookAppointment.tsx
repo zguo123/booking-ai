@@ -28,14 +28,6 @@ export const sendConfirmationEmail = async (
   try {
     const authFullName = `${authUser.firstName} ${authUser.lastName}`;
 
-    const AppointmentEmailComponent = (
-      <AppointmentConfirmed
-        appointmentDate={appointmentDate}
-        services={services}
-        price={totalPrice}
-      />
-    );
-
     const renderedEmail = render(
       <AppointmentConfirmed
         appointmentDate={appointmentDate}
@@ -149,7 +141,10 @@ export default async (
       const allPrices = await Promise.all(
         (cookieData?.services as string[]).map(async (service) => {
           // find service
-          const serviceData = await ServiceModel.findOne({ name: service });
+          const serviceData = await ServiceModel.findOne({
+            name: service,
+            user: userId,
+          });
 
           return serviceData?.price;
         })

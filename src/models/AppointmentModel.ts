@@ -3,9 +3,9 @@ import { Model, Schema, model, models } from "mongoose";
 
 export const appointmentSchema = new Schema<AppointmentItems>({
   user: {
-    type:  String, 
+    type: String,
     required: [true, "Please enter your user"],
-  }, 
+  },
   firstName: {
     type: String,
     required: [true, "Please enter your first name"],
@@ -29,6 +29,11 @@ export const appointmentSchema = new Schema<AppointmentItems>({
   appointmentNotes: {
     type: String,
     required: false,
+  },
+
+  totalDuration: {
+    type: Number,
+    required: [true, "Please enter your total duration"],
   },
 
   services: {

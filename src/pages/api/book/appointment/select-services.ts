@@ -10,7 +10,7 @@ const selectServicesHandler: GenericAppointmentAPIHandler = async (
 ) => {
   const {
     method,
-    body: { appointmentData },
+    body: { appointmentData, userId },
   } = req;
 
   switch (method) {
@@ -18,9 +18,12 @@ const selectServicesHandler: GenericAppointmentAPIHandler = async (
       // find existing cookie data
       const cookieData = getAppointmentCookie(req);
 
+      logger.child({ appointmentData, userId }).info("[selectServices]");
+
       const { status, success } = await selectServices(
         appointmentData?.services || [],
         res,
+        userId as string,
         cookieData || undefined
       );
 

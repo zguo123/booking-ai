@@ -14,7 +14,7 @@ export default function ServicesPage() {
     defaultValue: [],
   });
 
-  const { services, isUserLoading } = useGetUserInfo();
+  const { user, services, isUserLoading } = useGetUserInfo();
 
   const base = useBookBaseUrl();
 
@@ -27,7 +27,10 @@ export default function ServicesPage() {
 
   const next = async () => {
     try {
-      const res = await addServices(value as string[]).unwrap();
+      const res = await addServices({
+        services: value as string[],
+        userId: user?._id as string,
+      }).unwrap();
 
       if (res?.success) {
         router.push(`${base}/select-date`);
