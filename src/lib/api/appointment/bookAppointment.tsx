@@ -174,7 +174,9 @@ export default async (
         user,
         contactInfo?.email as string,
         formatDate(cookieData?.appointmentDate as Date),
-        cookieData?.services?.join(", ") as string,
+        cookieData?.services
+          ?.map((service) => service?.trim())
+          ?.join(", ") as string,
         formatPrice(totalPrice as number)
       );
     }

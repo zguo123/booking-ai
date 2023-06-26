@@ -88,3 +88,4 @@ export const formatDate = (appointment: Date): string => {
 
   return formattedDate;
 };
+

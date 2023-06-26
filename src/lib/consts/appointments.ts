@@ -1,4 +1,3 @@
-
 export const appointmentDataColumns = [
   {
     id: "name",

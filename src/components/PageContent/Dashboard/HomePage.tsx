@@ -38,6 +38,9 @@ export default function HomePage() {
 
           return {
             ...appointment,
+            services: appointment.services
+              .map((service) => service?.trim())
+              ?.join(", "),
             name: `${appointment?.firstName} ${appointment?.lastName}`,
             date: formattedDate,
             totalPrice: formatPrice(appointment.totalPrice),

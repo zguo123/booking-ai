@@ -3,11 +3,13 @@
 import BookingLayoutBase from "@/components/Base/BookingLayoutBase";
 import useBookBaseUrl from "@/hooks/useBookBaseUrl";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
-import { getHours } from "@/lib/api/appointment/helpers";
-import { sampleDates } from "@/lib/consts/dates";
+import { getHours, getTimeStatus } from "@/lib/api/appointment/helpers";
 import { convert12HourTo24Hour } from "@/lib/dateHelpers";
 import { useSelectTimeMutation } from "@/redux/services/bookAppointment";
-import { AppointmentCookieData } from "@/typings/appointments";
+import {
+  AppointmentCookieData,
+  AppointmentItems,
+} from "@/typings/appointments";
 import { AvailabilityItems } from "@/typings/availability";
 import { WarningIcon } from "@chakra-ui/icons";
 import {
@@ -40,14 +42,18 @@ import React, { useCallback, useMemo } from "react";
 
 export type SelectDatePageProps = {
   appointmentCookie: AppointmentCookieData;
+  currentAppointments: AppointmentItems[];
 };
 
 export default function SelectDatePage({
   appointmentCookie,
+  currentAppointments,
 }: SelectDatePageProps) {
   const [value, setValue] = React.useState<DateValue>(
     today(getLocalTimeZone())
   );
+
+  const times = getTimeStatus(currentAppointments);
 
   const bookBase = useBookBaseUrl();
 

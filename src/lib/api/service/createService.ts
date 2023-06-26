@@ -55,6 +55,8 @@ export default async (
       // create
       await ServiceModel.create({
         ...serviceData,
+        name: serviceData.name.trim(),
+        description: serviceData?.description?.trim(),
         user: userId,
       });
     }

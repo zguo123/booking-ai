@@ -1,13 +1,19 @@
 import { days } from "@/lib/consts/days";
 import { removeTokenCookie } from "@/lib/cookies";
-import { getDayAsName } from "@/lib/dateHelpers";
+import { formatDate, getDayAsName } from "@/lib/dateHelpers";
 import {
   AppointmentCookieData,
+  AppointmentItems,
   AppointmentResponse,
 } from "@/typings/appointments";
 import { AvailabilityItems, WorkingHours } from "@/typings/availability";
 import { TimeStatusProps } from "@/typings/service";
-import { parseAbsoluteToLocal } from "@internationalized/date";
+import {
+  parseAbsolute,
+  parseAbsoluteToLocal,
+  parseDateTime,
+  parseZonedDateTime,
+} from "@internationalized/date";
 import { serialize } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -60,6 +66,22 @@ export const getAppointmentCookie = (
   } catch (error) {
     return null;
   }
+};
+
+export const getTimeStatus = (appointments: AppointmentItems[]) => {
+  // get appointment times
+  const appointmentTimes = appointments.map((appointment) => {
+    const timeStart = parseAbsolute(
+      (appointment?.appointmentDate as Date).toISOString(),
+      "America/Toronto"
+    );
+
+    const timeEnd = timeStart.add({ minutes: appointment?.totalDuration });
+
+    console.log(timeEnd);
+
+    // return formatDate(appointment?.appointmentDate as Date);
+  });
 };
 
 export const getHours = (
@@ -124,7 +146,6 @@ export const getHours = (
   // interval in minutes from duration
   const interval = duration * 60 * 1000;
 
-
   for (
     let time = fromTime.getTime();
     time <= toTime.getTime();
@@ -134,9 +155,6 @@ export const getHours = (
     const hour = currTime.getHours();
 
     const min = currTime.getMinutes();
-
-    // pad 0 to hour
-    const hourString = hour < 10 ? `0${hour}` : `${hour}`;
 
     // convert hour to 12 hour format
     const hour12hrString = hour > 12 ? `${hour - 12}` : `${hour}`;
