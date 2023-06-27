@@ -70,7 +70,7 @@ export const getAppointmentCookie = (
 
 export const getTimeStatus = (appointments: AppointmentItems[]) => {
   // get appointment times
-  const appointmentTimes = appointments.map((appointment) => {
+  return appointments.map((appointment) => {
     const timeStart = parseAbsolute(
       (appointment?.appointmentDate as Date).toISOString(),
       "America/Toronto"
@@ -78,9 +78,11 @@ export const getTimeStatus = (appointments: AppointmentItems[]) => {
 
     const timeEnd = timeStart.add({ minutes: appointment?.totalDuration });
 
-    console.log(timeEnd);
-
-    // return formatDate(appointment?.appointmentDate as Date);
+    return {
+      timeStart,
+      timeEnd,
+      id: appointment?._id,
+    };
   });
 };
 
@@ -88,7 +90,8 @@ export const getHours = (
   schedules: AvailabilityItems[],
   currMonthYear: string,
   dateString: string,
-  duration: number
+  duration: number,
+  appointments: AppointmentItems[]
 ): TimeStatusProps[] => {
   let hours: TimeStatusProps[] = [];
 
@@ -167,10 +170,36 @@ export const getHours = (
     const isPast =
       parseAbsoluteToLocal(currTime?.toISOString()).compare(currDate) < 0;
 
+    getTimeStatus(appointments).forEach((appointment) => {
+      // compare the start time and currTime
+      const startCompare = appointment.timeStart.compare(
+        parseAbsoluteToLocal(currTime?.toISOString())
+      );
+
+      // compare the end time and currTime
+      const endCompare = appointment.timeEnd.compare(
+        parseAbsoluteToLocal(currTime?.toISOString())
+      );
+
+      // true if currentTime is between start and end time
+
+      if (startCompare <= 0 && endCompare >= 0) {
+        hours.push({
+          time: `${hour12hrString}:${minString} ${AmToPm}`,
+          status: "booked",
+        });
+      }
+    });
+
     hours.push({
       time: `${hour12hrString}:${minString} ${AmToPm}`,
       status: isPast ? "unavailable" : "available",
     });
+
+    // remove duplicates
+    hours = hours.filter(
+      (v, i, a) => a.findIndex((t) => t.time === v.time) === i
+    );
   }
 
   return hours;

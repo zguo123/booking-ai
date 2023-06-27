@@ -13,12 +13,15 @@ import {
 import { AvailabilityItems } from "@/typings/availability";
 import { WarningIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Center,
+  Flex,
   Heading,
   SimpleGrid,
   Stack,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import {
   DatePickerCalendar,
@@ -38,7 +41,7 @@ import {
   EmptyStateTitle,
 } from "@saas-ui/react";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useMemo } from "react";
+import React, { Fragment, useCallback, useMemo } from "react";
 
 export type SelectDatePageProps = {
   appointmentCookie: AppointmentCookieData;
@@ -69,15 +72,18 @@ export default function SelectDatePage({
   const date = useMemo(() => {
     const currMonthYear = value.toString().split("-").slice(0, 2).join("-");
 
+    console.log("duration", appointmentCookie?.totalDuration);
+
     const hours = getHours(
       schedules as AvailabilityItems[],
       currMonthYear,
       value?.toDate(getLocalTimeZone())?.toDateString(),
-      appointmentCookie?.totalDuration as number
+      appointmentCookie?.totalDuration as number,
+      currentAppointments
     );
 
     return hours;
-  }, [value, schedules]);
+  }, [value, schedules, currentAppointments, appointmentCookie]);
 
   const chooseTime = useCallback(
     async (selectedTime: string) => {
@@ -152,33 +158,47 @@ export default function SelectDatePage({
             {date.length > 0 ? (
               <>
                 <SimpleGrid columns={3} spacing={3}>
-                  {date.map((time) => (
-                    <Button
-                      size={{
-                        base: "md",
-                        md: "lg",
-                      }}
-                      variant="outline"
-                      key={`${time?.time}`}
-                      isActive={
-                        time.status === "available" && time.time === newTime
-                      }
-                      isLoading={isSelectingTime}
-                      onClick={() => {
-                        // set time
-                        setTime(time?.time);
+                  {date.map((time) => {
+                    const Wrapper =
+                      time?.status === "booked" ? Tooltip : Fragment;
 
-                        // set date
-                        chooseTime(time?.time);
-                      }}
-                      isDisabled={
-                        time.status === "unavailable" ||
-                        time.status === "booked"
-                      }
-                    >
-                      {time?.time}
-                    </Button>
-                  ))}{" "}
+                    return (
+                      <Wrapper label="Booked" w="full">
+                        <Button
+                          size={{
+                            base: "md",
+                            md: "lg",
+                          }}
+                          variant="outline"
+                          key={`${time?.time}`}
+                          isActive={
+                            time.status === "available" && time.time === newTime
+                          }
+                          colorScheme={
+                            time.status === "available"
+                              ? "green"
+                              : time.status === "booked"
+                              ? "red"
+                              : "auto"
+                          }
+                          isLoading={isSelectingTime}
+                          onClick={() => {
+                            // set time
+                            setTime(time?.time);
+
+                            // set date
+                            chooseTime(time?.time);
+                          }}
+                          isDisabled={
+                            time.status === "unavailable" ||
+                            time.status === "booked"
+                          }
+                        >
+                          {time?.time} is {time?.status}
+                        </Button>
+                      </Wrapper>
+                    );
+                  })}{" "}
                 </SimpleGrid>
               </>
             ) : (
