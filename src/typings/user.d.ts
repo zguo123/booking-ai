@@ -14,6 +14,14 @@ import { ServiceItems } from "./service";
 import { AvailabilityItems } from "./availability";
 
 // database schemas
+
+export type IntegrationsTypes = "Google Calendar";
+
+export type IntegrationStructure = {
+  name: IntegrationsTypes;
+  id: string;
+};
+
 export interface IUserItems {
   _id?: string;
   firstName: string;
@@ -21,6 +29,7 @@ export interface IUserItems {
   lastLogin?: Date;
   email: string;
   username: string;
+  integrations: IntegrationsTypes[];
 }
 
 export type UserParams = Pick<

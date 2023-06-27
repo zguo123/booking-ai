@@ -72,7 +72,6 @@ export default function SelectDatePage({
   const date = useMemo(() => {
     const currMonthYear = value.toString().split("-").slice(0, 2).join("-");
 
-    console.log("duration", appointmentCookie?.totalDuration);
 
     const hours = getHours(
       schedules as AvailabilityItems[],

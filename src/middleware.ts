@@ -51,16 +51,16 @@ export default async function middleware(
       );
     }
 
-    await flagsmith.init({
-      environmentID: process.env.NEXT_PUBLIC_FEATURE_FLAG_CLIENT_KEY || "",
-      identity: data?.user?.username as string,
-      enableAnalytics: true,
-      traits: {
-        Email: data?.user?.email as string,
-        Username: data?.user?.username as string,
-        "Full Name": `${data?.user?.firstName} ${data?.user?.lastName}`,
-      },
-    });
+    // await flagsmith.init({
+    //   environmentID: process.env.NEXT_PUBLIC_FEATURE_FLAG_CLIENT_KEY || "",
+    //   identity: data?.user?.username as string,
+    //   enableAnalytics: true,
+    //   traits: {
+    //     Email: data?.user?.email as string,
+    //     Username: data?.user?.username as string,
+    //     "Full Name": `${data?.user?.firstName} ${data?.user?.lastName}`,
+    //   },
+    // });
 
     if (
       pathname?.includes("/book") ||

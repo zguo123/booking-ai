@@ -41,21 +41,12 @@ export default async function RootLayout({
     }
   }
 
-  // const response = await fetch("/api/user/retrieveAuth", {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: "Bearer " + token,
-  //   },
-  // });
-
-  // console.log(response);
-
   const flagsmithSSR = createFlagsmithInstance();
   await flagsmithSSR.init({
     // fetches flags on the server
     environmentID: process.env.NEXT_PUBLIC_FEATURE_FLAG_CLIENT_KEY as string,
     realtime: true,
+    enableAnalytics: true,
     identity: identity,
     traits: !currUser
       ? undefined

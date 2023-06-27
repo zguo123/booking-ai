@@ -22,8 +22,6 @@ export default async function BookingSelectDatePage({
 
   const appointmentCookies = cookies().get("appointment")?.value;
 
-  console.log(appointmentCookies);
-
   if (!appointmentCookies) {
     redirect(`/book/${userId}`);
   }

@@ -6,8 +6,8 @@
  * @author Zhaoyu Guo
  */
 
+import { IUserItems } from "@/typings/user";
 import { Model, model, models, Schema } from "mongoose";
-import { UserItemsWithoutId, IUserItems } from "@/typings/user";
 import validator from "validator";
 
 const userSchema = new Schema<IUserItems>({
@@ -53,6 +53,12 @@ const userSchema = new Schema<IUserItems>({
     type: Date,
     default: new Date(),
     required: [true, "Last login is required"],
+  },
+
+  integrations: {
+    type: [String],
+    default: [],
+    required: false,
   },
 });
 
