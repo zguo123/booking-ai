@@ -7,7 +7,8 @@
  */
 
 import { ErrorType } from "@/typings/global";
-import { UserResponse } from "@/typings/user";
+import { IntegrationAPIRes } from "@/typings/integrations";
+import { IntegrationAuth, UserResponse } from "@/typings/user";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 export const createAuthApi = createApi({
@@ -17,6 +18,15 @@ export const createAuthApi = createApi({
   }),
   tagTypes: ["Auth"],
   endpoints: (builder) => ({
+    integrationConnection: builder.mutation<IntegrationAPIRes, IntegrationAuth>(
+      {
+        query: (provider) => ({
+          url: `integrations/connect/${provider}`,
+          method: "POST",
+        }),
+      }
+    ),
+
     login: builder.mutation<UserResponse, string>({
       query: (token) => ({
         url: "/authenticate",
@@ -35,4 +45,7 @@ export const createAuthApi = createApi({
   }),
 });
 
-export const { useLoginMutation } = createAuthApi;
+export const {
+  useLoginMutation,
+  useIntegrationConnectionMutation,
+} = createAuthApi;

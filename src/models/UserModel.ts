@@ -6,9 +6,22 @@
  * @author Zhaoyu Guo
  */
 
+import { Integration } from "@/typings/integrations";
 import { IUserItems } from "@/typings/user";
 import { Model, model, models, Schema } from "mongoose";
 import validator from "validator";
+
+const integrationSchema = new Schema<Integration>({
+  integrationName: {
+    type: String,
+    required: [true, "Integration Name is required"],
+  },
+
+  code: {
+    type: String,
+    required: [true, "Code is required"],
+  },
+});
 
 const userSchema = new Schema<IUserItems>({
   firstName: {
@@ -56,7 +69,7 @@ const userSchema = new Schema<IUserItems>({
   },
 
   integrations: {
-    type: [String],
+    type: [integrationSchema],
     default: [],
     required: false,
   },

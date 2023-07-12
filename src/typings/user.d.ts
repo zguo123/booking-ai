@@ -12,10 +12,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { APIRet, Override } from "./global";
 import { ServiceItems } from "./service";
 import { AvailabilityItems } from "./availability";
+import { Integration } from "./integrations";
 
 // database schemas
 
 export type IntegrationsTypes = "Google Calendar";
+
+export type IntegrationAuth = "google";
 
 export type IntegrationStructure = {
   name: IntegrationsTypes;
@@ -29,7 +32,7 @@ export interface IUserItems {
   lastLogin?: Date;
   email: string;
   username: string;
-  integrations: IntegrationsTypes[];
+  integrations: Integration[];
 }
 
 export type UserParams = Pick<

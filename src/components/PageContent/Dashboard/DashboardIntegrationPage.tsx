@@ -10,13 +10,11 @@ import {
   SectionTitle,
 } from "@saas-ui/pro";
 
-import {
-  Card,
-  CardBody,
-  List
-} from "@saas-ui/react";
+import { Card, CardBody, List } from "@saas-ui/react";
 
-export default function DashboardIntegrationPage() {
+export type DashboardIntegrationPageProps = {};
+
+export default function DashboardIntegrationPage({}: DashboardIntegrationPageProps) {
   return (
     <Container maxW="container.xl" py={"1.5rem"}>
       <SectionContainer>
