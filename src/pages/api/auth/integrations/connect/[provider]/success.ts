@@ -38,16 +38,7 @@ const connectionSuccessIntegrationHandler: IntegrationAPIHandler = async (
             req?.cookies?.token as string
           );
 
-          if (googleSuccess) {
-            // redirect to /dashboard/integrations
-            res.redirect("/dashboard/integrations");
-          }
-
-          return res.status(googleStatus).json({
-            success: googleSuccess,
-            status: googleStatus,
-            ...googleRest,
-          });
+          return res.status(googleStatus).redirect("/dashboard/integrations");
 
         default:
           return res.status(StatusCodes.BAD_REQUEST).json({
